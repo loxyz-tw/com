@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-scroll';
-import { FaMobileAlt, FaGlobe, FaCog, FaMicrophone, FaEnvelope, FaChevronDown } from 'react-icons/fa';
+import { FaMobileAlt, FaGlobe, FaCog, FaMicrophone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -54,7 +54,7 @@ export default function App() {
       <nav className="fixed top-0 w-full bg-tech-darker/80 backdrop-blur-md shadow-lg z-50 border-b border-tech-cyan/20">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-heading font-bold text-tech-cyan text-glow">
-            開發同學會工作室
+            丰科有限公司
           </h1>
           
           {/* 桌面版選單 */}
@@ -189,7 +189,7 @@ export default function App() {
 
         <div className="text-center max-w-5xl mx-auto px-6 relative z-10" data-aos="fade-up">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-tech-cyan text-glow mb-4">
-            開發同學會工作室
+            丰科有限公司
           </h1>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-semibold text-tech-text mb-6">
             專業 App、網站與 AI 應用開發
@@ -519,12 +519,12 @@ export default function App() {
                     <span className="text-tech-cyan font-semibold">Email:</span>
                   </p>
                   <a 
-                    href="mailto:loxyz.tw@gmail.com" 
+                    href="mailto:app@fun-tech.vip" 
                     className="text-tech-cyan hover:text-tech-purple transition-colors underline text-lg"
                     target="_blank" 
                     rel="noopener noreferrer"
                   >
-                    loxyz.tw@gmail.com
+                    app@fun-tech.vip
                   </a>
                 </div>
               </div>
@@ -536,12 +536,12 @@ export default function App() {
                     <span className="text-tech-cyan font-semibold">Email:</span>
                   </p>
                   <a 
-                    href="mailto:app@roylo.xyz" 
+                    href="mailto:loxyz.tw@gmail.com" 
                     className="text-tech-cyan hover:text-tech-purple transition-colors underline text-lg"
                     target="_blank" 
                     rel="noopener noreferrer"
                   >
-                    app@roylo.xyz
+                    loxyz.tw@gmail.com
                   </a>
                 </div>
               </div>
@@ -549,6 +549,22 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* 頁尾 */}
+      <footer className="bg-tech-darker border-t border-tech-cyan/20 py-8">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-tech-cyan font-heading font-bold text-lg mb-2">
+            丰科有限公司 Fun Tech CO
+          </p>
+          <div className="flex items-center justify-center gap-2 text-tech-text mb-2">
+            <FaMapMarkerAlt className="text-tech-cyan flex-shrink-0" />
+            <span>新北市中和區中原二街28號18樓</span>
+          </div>
+          <p className="text-tech-text/70 text-sm">
+            © 2025 丰科有限公司
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
