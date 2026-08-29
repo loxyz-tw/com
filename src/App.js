@@ -226,7 +226,7 @@ export default function App() {
       <div className="section-divider" />
 
       {/* 關於我們區塊 */}
-      <section id="about" className="min-h-screen flex items-center justify-center py-20">
+      <section id="about" className="py-24 md:py-32">
         <div className="max-w-6xl mx-auto px-6">
           <h2 
             className="text-4xl md:text-5xl font-heading font-bold text-tech-cyan text-glow text-center mb-12"
@@ -253,7 +253,7 @@ export default function App() {
               <div className="text-5xl font-heading font-bold text-tech-cyan text-glow mb-2 count-animate">
                 10+
               </div>
-              <div className="text-tech-text text-lg">年經驗</div>
+              <div className="text-tech-text text-lg">團隊開發年資</div>
             </div>
           </div>
 
@@ -276,7 +276,7 @@ export default function App() {
       <div className="section-divider" />
 
       {/* 服務區塊 */}
-      <section id="services" className="min-h-screen flex items-center justify-center py-20">
+      <section id="services" className="py-24 md:py-32">
         <div className="max-w-6xl mx-auto px-6">
           <h2 
             className="text-4xl md:text-5xl font-heading font-bold text-tech-cyan text-glow text-center mb-12"
@@ -298,7 +298,7 @@ export default function App() {
                 <div className="w-16 h-16 bg-tech-cyan/20 rounded-full flex items-center justify-center mb-6 icon-rotate">
                   <FaMobileAlt className="text-3xl text-tech-cyan" />
                 </div>
-                <h3 className="text-2xl font-heading font-semibold text-tech-cyan mb-4">
+                <h3 className="text-2xl font-body font-semibold text-tech-cyan mb-4">
                   手機 App 開發
                 </h3>
                 <p className="text-tech-text leading-relaxed mb-4">
@@ -388,7 +388,7 @@ export default function App() {
                 <div className="w-16 h-16 bg-tech-cyan/20 rounded-full flex items-center justify-center mb-6 icon-rotate">
                   <FaMicrophone className="text-3xl text-tech-cyan" />
                 </div>
-                <h3 className="text-2xl font-heading font-semibold text-tech-cyan mb-4">
+                <h3 className="text-2xl font-body font-semibold text-tech-cyan mb-4">
                   語音 AI 模型應用
                 </h3>
                 <p className="text-tech-text leading-relaxed mb-4">
@@ -412,7 +412,7 @@ export default function App() {
               data-aos="fade-up"
               data-aos-delay="400"
             >
-              <h3 className="text-2xl font-heading font-semibold text-tech-cyan mb-4">
+              <h3 className="text-2xl font-body font-semibold text-tech-cyan mb-4">
                 協助申請安卓 App 正式版權限
               </h3>
               <p className="text-tech-text leading-relaxed">
@@ -428,7 +428,7 @@ export default function App() {
       <div className="section-divider" />
 
       {/* 專案成果區塊 */}
-      <section id="portfolio" className="min-h-screen flex items-center justify-center py-20">
+      <section id="portfolio" className="py-24 md:py-32">
         <div className="max-w-6xl mx-auto px-6">
           <h2 
             className="text-4xl md:text-5xl font-heading font-bold text-tech-cyan text-glow text-center mb-4"
@@ -464,7 +464,7 @@ export default function App() {
                   <div className="mb-2">
                     <span className="text-xs text-tech-purple font-semibold">{project.category}</span>
                   </div>
-                  <h3 className="text-xl font-heading font-semibold text-tech-cyan mb-2">
+                  <h3 className="text-xl font-body font-semibold text-tech-cyan mb-2">
                     {project.title}
                   </h3>
                   <p className="text-tech-text text-sm mb-4 leading-relaxed">
@@ -490,7 +490,7 @@ export default function App() {
       <div className="section-divider" />
 
       {/* 聯絡我們區塊 */}
-      <section id="contact" className="min-h-screen flex items-center justify-center py-20 bg-tech-darker">
+      <section id="contact" className="py-24 md:py-32 bg-tech-darker">
         <div className="max-w-4xl mx-auto px-6">
           <h2 
             className="text-4xl md:text-5xl font-heading font-bold text-tech-cyan text-glow text-center mb-4"
@@ -528,23 +528,6 @@ export default function App() {
                   </a>
                 </div>
               </div>
-              
-              <div className="flex items-start space-x-4">
-                <FaEnvelope className="text-2xl text-tech-cyan mt-1 flex-shrink-0" />
-                <div>
-                  <p className="text-tech-text mb-1">
-                    <span className="text-tech-cyan font-semibold">Email:</span>
-                  </p>
-                  <a 
-                    href="mailto:loxyz.tw@gmail.com" 
-                    className="text-tech-cyan hover:text-tech-purple transition-colors underline text-lg"
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                  >
-                    loxyz.tw@gmail.com
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -561,7 +544,7 @@ export default function App() {
             <span>新北市中和區中原二街28號18樓</span>
           </div>
           <p className="text-tech-text/70 text-sm">
-            © 2025 丰科有限公司
+            © {new Date().getFullYear()} 丰科有限公司
           </p>
         </div>
       </footer>

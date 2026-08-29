@@ -25,34 +25,39 @@ code {
     monospace;
 }
 
-/* 背景圖片區塊 - 加入深色漸層覆蓋 */
+/* 區塊背景漸層（走 Tailwind token，維持明暗層次差） */
 #home {
-  background-image: linear-gradient(rgba(10, 10, 15, 0.85), rgba(10, 10, 15, 0.85)), url('./images/home-bg.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-image: linear-gradient(
+    to bottom,
+    theme('colors.tech-dark'),
+    theme('colors.tech-darker')
+  );
   position: relative;
 }
 
 #about {
-  background-image: linear-gradient(rgba(18, 18, 26, 0.9), rgba(18, 18, 26, 0.9)), url('./images/about-bg.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-image: linear-gradient(
+    to bottom,
+    theme('colors.tech-darker'),
+    theme('colors.tech-dark')
+  );
 }
 
 #services {
-  background-image: linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)), url('./images/services-bg.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-image: linear-gradient(
+    160deg,
+    theme('colors.tech-dark') 0%,
+    theme('colors.tech-darker') 55%,
+    theme('colors.tech-dark') 100%
+  );
 }
 
 #portfolio {
-  background-image: linear-gradient(rgba(18, 18, 26, 0.9), rgba(18, 18, 26, 0.9)), url('./images/portfolio-bg.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-image: linear-gradient(
+    to top,
+    theme('colors.tech-darker'),
+    theme('colors.tech-dark')
+  );
 }
 
 /* 霓虹發光效果 */
