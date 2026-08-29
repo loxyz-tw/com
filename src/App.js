@@ -42,6 +42,7 @@ export default function App() {
   const lightboxTriggerRef = useRef(null);
   const lightboxDialogRef = useRef(null);
   const lightboxCloseBtnRef = useRef(null);
+  const lightboxScrollRef = useRef(null);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -90,6 +91,7 @@ export default function App() {
       },
       links: [{ label: '查看專案', url: 'https://www.news-to-comic.xyz/' }],
       alt: '新聞漫畫專案畫面：兩支手機展示由新聞自動生成的三格漫畫',
+      lightboxLayout: 'scroll',
       lightbox: [
         {
           src: newstocomicFull,
@@ -121,6 +123,7 @@ export default function App() {
         },
       ],
       alt: '蔬食綠洲 App 畫面：三支手機展示蔬食地圖、店家詳情與共編功能',
+      lightboxLayout: 'swipe',
       lightbox: [
         { src: vegmapFull1, alt: '蔬食綠洲 App 畫面：地圖瀏覽' },
         { src: vegmapFull2, alt: '蔬食綠洲 App 畫面：店家詳情' },
@@ -143,6 +146,7 @@ export default function App() {
       },
       links: [{ label: '查看專案', url: 'https://www.wbc-tw.club/' }],
       alt: 'WBC 2026 台灣情報站畫面：Pool C 五隊戰力雷達比較',
+      lightboxLayout: 'fit',
       lightbox: [
         {
           src: wbcFull1,
@@ -168,15 +172,16 @@ export default function App() {
         srcSet: `${vegblogCover640} 640w, ${vegblogCover1280} 1280w`,
       },
       links: [{ label: '查看專案', url: 'https://vegmap.app/' }],
-      alt: '蔬食知識庫網站畫面：四個內容分類與最新文章列表',
+      alt: '蔬食知識庫網站首屏：站名、以證據為本的素食營養與生活指南標題與行動按鈕',
+      lightboxLayout: 'scroll',
       lightbox: [
         {
           src: vegblogFull1,
-          alt: '蔬食知識庫首頁：營養指南、保健評析、空汙議題、生活實踐四個分類與最新文章',
+          alt: '蔬食知識庫首頁完整頁面：首屏、四個內容分類、六篇最新文章與 App 下載區',
         },
         {
           src: vegblogFull2,
-          alt: '蔬食知識庫文章內頁：內文與風險提醒段落',
+          alt: '蔬食知識庫文章完整頁面：內文、營養資料表格，末段為編號參考來源清單與免責聲明',
         },
       ],
     },
@@ -225,17 +230,19 @@ export default function App() {
       }
 
       const images = lightboxProject.lightbox;
-      if (images.length > 1 && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
-        // VegMap 用橫向滑動；WBC（2 張）用前後切換 + 左右鍵
-        if (images.length === 2) {
-          event.preventDefault();
-          setLightboxIndex((current) => {
-            if (event.key === 'ArrowLeft') {
-              return (current - 1 + images.length) % images.length;
-            }
-            return (current + 1) % images.length;
-          });
-        }
+      // swipe（VegMap）用橫向滑動；其餘多圖用左右鍵切換
+      if (
+        lightboxProject.lightboxLayout !== 'swipe' &&
+        images.length > 1 &&
+        (event.key === 'ArrowLeft' || event.key === 'ArrowRight')
+      ) {
+        event.preventDefault();
+        setLightboxIndex((current) => {
+          if (event.key === 'ArrowLeft') {
+            return (current - 1 + images.length) % images.length;
+          }
+          return (current + 1) % images.length;
+        });
       }
 
       if (event.key === 'Tab') {
@@ -262,6 +269,25 @@ export default function App() {
       document.removeEventListener('keydown', onKeyDown);
     };
   }, [lightboxProject, closeLightbox]);
+
+  // 長圖 lightbox 切換後捲回頂部
+  useEffect(() => {
+    if (!lightboxProject || lightboxProject.lightboxLayout !== 'scroll') return;
+    if (lightboxScrollRef.current) {
+      lightboxScrollRef.current.scrollTop = 0;
+    }
+  }, [lightboxProject, lightboxIndex]);
+
+  const showLightboxArrows =
+    !!lightboxProject &&
+    lightboxProject.lightboxLayout !== 'swipe' &&
+    lightboxProject.lightbox.length > 1;
+
+  const stepLightbox = (delta) => {
+    if (!lightboxProject) return;
+    const total = lightboxProject.lightbox.length;
+    setLightboxIndex((current) => (current + delta + total) % total);
+  };
 
   return (
     <div className="font-body bg-tech-dark text-tech-text page-load">
@@ -832,7 +858,7 @@ export default function App() {
               aria-modal="true"
               aria-label={`${lightboxProject.title}完整畫面`}
               className={`relative w-full md:w-full md:max-w-5xl bg-tech-darker border border-tech-cyan/30 md:rounded-lg shadow-2xl flex flex-col overflow-hidden ${
-                lightboxProject.lightbox.length === 2
+                lightboxProject.lightboxLayout === 'fit'
                   ? 'h-auto max-h-[100dvh] md:max-h-[90dvh]'
                   : 'h-full md:h-[90vh]'
               }`}
@@ -850,19 +876,75 @@ export default function App() {
                 </button>
               </div>
 
-              {lightboxProject.lightbox.length === 1 && (
-                <div className="relative flex-1 min-h-0 overflow-hidden">
-                  <div className="h-full overflow-y-auto p-4">
-                    <img
-                      src={lightboxProject.lightbox[0].src}
-                      alt={lightboxProject.lightbox[0].alt}
-                      className="block mx-auto max-w-full h-auto"
-                    />
+              {lightboxProject.lightboxLayout === 'scroll' && (
+                <>
+                  <div className="relative flex-1 min-h-0 overflow-hidden">
+                    {showLightboxArrows && (
+                      <>
+                        <button
+                          type="button"
+                          className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-tech-darker"
+                          aria-label="上一張"
+                          onClick={() => stepLightbox(-1)}
+                        >
+                          <FaChevronLeft className="text-xl" aria-hidden="true" />
+                        </button>
+                        <button
+                          type="button"
+                          className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-tech-darker"
+                          aria-label="下一張"
+                          onClick={() => stepLightbox(1)}
+                        >
+                          <FaChevronRight className="text-xl" aria-hidden="true" />
+                        </button>
+                      </>
+                    )}
+                    <div ref={lightboxScrollRef} className="h-full overflow-y-auto p-4">
+                      <img
+                        src={lightboxProject.lightbox[lightboxIndex].src}
+                        alt={lightboxProject.lightbox[lightboxIndex].alt}
+                        decoding="async"
+                        className={
+                          lightboxProject.anchor === 'project-vegblog'
+                            ? 'block w-full max-w-[832px] mx-auto h-auto'
+                            : 'block mx-auto max-w-full h-auto'
+                        }
+                      />
+                    </div>
                   </div>
-                </div>
+
+                  {showLightboxArrows && (
+                    <>
+                      <div className="md:hidden flex items-center justify-center gap-6 px-4 py-3 border-t border-tech-cyan/20 shrink-0">
+                        <button
+                          type="button"
+                          className="flex w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                          aria-label="上一張"
+                          onClick={() => stepLightbox(-1)}
+                        >
+                          <FaChevronLeft className="text-xl" aria-hidden="true" />
+                        </button>
+                        <span className="text-tech-text/80 text-sm tabular-nums min-w-[3rem] text-center">
+                          {lightboxIndex + 1} / {lightboxProject.lightbox.length}
+                        </span>
+                        <button
+                          type="button"
+                          className="flex w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                          aria-label="下一張"
+                          onClick={() => stepLightbox(1)}
+                        >
+                          <FaChevronRight className="text-xl" aria-hidden="true" />
+                        </button>
+                      </div>
+                      <p className="hidden md:block text-center text-tech-text/70 text-sm pb-3 shrink-0">
+                        {lightboxIndex + 1} / {lightboxProject.lightbox.length}
+                      </p>
+                    </>
+                  )}
+                </>
               )}
 
-              {lightboxProject.lightbox.length > 2 && (
+              {lightboxProject.lightboxLayout === 'swipe' && (
                 <div className="relative flex-1 min-h-0 overflow-hidden">
                   <div className="h-full overflow-x-auto snap-x snap-mandatory flex gap-4 p-4 items-center">
                     {lightboxProject.lightbox.map((image) => (
@@ -873,6 +955,7 @@ export default function App() {
                         <img
                           src={image.src}
                           alt={image.alt}
+                          decoding="async"
                           className="max-h-full w-auto object-contain"
                         />
                       </div>
@@ -881,77 +964,65 @@ export default function App() {
                 </div>
               )}
 
-              {lightboxProject.lightbox.length === 2 && (
+              {lightboxProject.lightboxLayout === 'fit' && (
                 <>
                   <div className="relative p-3 md:p-4">
                     <img
                       src={lightboxProject.lightbox[lightboxIndex].src}
                       alt={lightboxProject.lightbox[lightboxIndex].alt}
+                      decoding="async"
                       className="block mx-auto max-w-full h-auto"
                     />
-                    <button
-                      type="button"
-                      className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-tech-darker"
-                      aria-label="上一張"
-                      onClick={() =>
-                        setLightboxIndex(
-                          (current) =>
-                            (current - 1 + lightboxProject.lightbox.length) %
-                            lightboxProject.lightbox.length
-                        )
-                      }
-                    >
-                      <FaChevronLeft className="text-xl" aria-hidden="true" />
-                    </button>
-                    <button
-                      type="button"
-                      className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-tech-darker"
-                      aria-label="下一張"
-                      onClick={() =>
-                        setLightboxIndex(
-                          (current) => (current + 1) % lightboxProject.lightbox.length
-                        )
-                      }
-                    >
-                      <FaChevronRight className="text-xl" aria-hidden="true" />
-                    </button>
+                    {showLightboxArrows && (
+                      <>
+                        <button
+                          type="button"
+                          className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-tech-darker"
+                          aria-label="上一張"
+                          onClick={() => stepLightbox(-1)}
+                        >
+                          <FaChevronLeft className="text-xl" aria-hidden="true" />
+                        </button>
+                        <button
+                          type="button"
+                          className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-tech-darker"
+                          aria-label="下一張"
+                          onClick={() => stepLightbox(1)}
+                        >
+                          <FaChevronRight className="text-xl" aria-hidden="true" />
+                        </button>
+                      </>
+                    )}
                   </div>
 
-                  <div className="md:hidden flex items-center justify-center gap-6 px-4 py-3 border-t border-tech-cyan/20 shrink-0">
-                    <button
-                      type="button"
-                      className="flex w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
-                      aria-label="上一張"
-                      onClick={() =>
-                        setLightboxIndex(
-                          (current) =>
-                            (current - 1 + lightboxProject.lightbox.length) %
-                            lightboxProject.lightbox.length
-                        )
-                      }
-                    >
-                      <FaChevronLeft className="text-xl" aria-hidden="true" />
-                    </button>
-                    <span className="text-tech-text/80 text-sm tabular-nums min-w-[3rem] text-center">
-                      {lightboxIndex + 1} / {lightboxProject.lightbox.length}
-                    </span>
-                    <button
-                      type="button"
-                      className="flex w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
-                      aria-label="下一張"
-                      onClick={() =>
-                        setLightboxIndex(
-                          (current) => (current + 1) % lightboxProject.lightbox.length
-                        )
-                      }
-                    >
-                      <FaChevronRight className="text-xl" aria-hidden="true" />
-                    </button>
-                  </div>
-
-                  <p className="hidden md:block text-center text-tech-text/70 text-sm pb-3 shrink-0">
-                    {lightboxIndex + 1} / {lightboxProject.lightbox.length}
-                  </p>
+                  {showLightboxArrows && (
+                    <>
+                      <div className="md:hidden flex items-center justify-center gap-6 px-4 py-3 border-t border-tech-cyan/20 shrink-0">
+                        <button
+                          type="button"
+                          className="flex w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                          aria-label="上一張"
+                          onClick={() => stepLightbox(-1)}
+                        >
+                          <FaChevronLeft className="text-xl" aria-hidden="true" />
+                        </button>
+                        <span className="text-tech-text/80 text-sm tabular-nums min-w-[3rem] text-center">
+                          {lightboxIndex + 1} / {lightboxProject.lightbox.length}
+                        </span>
+                        <button
+                          type="button"
+                          className="flex w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                          aria-label="下一張"
+                          onClick={() => stepLightbox(1)}
+                        >
+                          <FaChevronRight className="text-xl" aria-hidden="true" />
+                        </button>
+                      </div>
+                      <p className="hidden md:block text-center text-tech-text/70 text-sm pb-3 shrink-0">
+                        {lightboxIndex + 1} / {lightboxProject.lightbox.length}
+                      </p>
+                    </>
+                  )}
                 </>
               )}
             </div>
