@@ -1,14 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-scroll';
-import { FaMobileAlt, FaGlobe, FaCog, FaMicrophone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import {
+  FaMobileAlt,
+  FaGlobe,
+  FaCog,
+  FaMicrophone,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaExternalLinkAlt,
+  FaTimes,
+  FaChevronLeft,
+  FaChevronRight,
+} from 'react-icons/fa';
+
+import newstocomicCover640 from './images/projects/newstocomic-cover-640.webp';
+import newstocomicCover1280 from './images/projects/newstocomic-cover-1280.webp';
+import newstocomicFull from './images/projects/newstocomic-full.webp';
+import vegmapCover640 from './images/projects/vegmap-cover-640.webp';
+import vegmapCover1280 from './images/projects/vegmap-cover-1280.webp';
+import vegmapFull1 from './images/projects/vegmap-full-1.webp';
+import vegmapFull2 from './images/projects/vegmap-full-2.webp';
+import vegmapFull3 from './images/projects/vegmap-full-3.webp';
+import vegmapFull4 from './images/projects/vegmap-full-4.webp';
+import wbcCover640 from './images/projects/wbc-cover-640.webp';
+import wbcCover1280 from './images/projects/wbc-cover-1280.webp';
+import wbcFull1 from './images/projects/wbc-full-1.webp';
+import wbcFull2 from './images/projects/wbc-full-2.webp';
+
+const PROJECT_COVER_SIZES =
+  '(min-width: 1200px) 347px, (min-width: 1024px) calc((100vw - 152px) / 3), (min-width: 768px) calc((100vw - 120px) / 2), calc(100vw - 88px)';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [lightboxProject, setLightboxProject] = useState(null);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const lightboxTriggerRef = useRef(null);
+  const lightboxDialogRef = useRef(null);
+  const lightboxCloseBtnRef = useRef(null);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  const openLightbox = (project, triggerEl) => {
+    lightboxTriggerRef.current = triggerEl;
+    setLightboxIndex(0);
+    setLightboxProject(project);
+  };
+
+  const closeLightbox = useCallback(() => {
+    setLightboxProject(null);
+    setLightboxIndex(0);
+    const trigger = lightboxTriggerRef.current;
+    if (trigger && typeof trigger.focus === 'function') {
+      trigger.focus();
+    }
+    lightboxTriggerRef.current = null;
+  }, []);
 
   // 粒子背景生成
   const particles = Array.from({ length: 20 }, (_, i) => ({
@@ -24,29 +74,138 @@ export default function App() {
   const projects = [
     {
       id: 1,
-      title: 'AI 生成式模型',
-      category: 'AI',
-      description: 'Text-to-Image 與 Text-to-Video 生成應用',
-      technologies: ['文生圖', '文生影', '生成式AI'],
-      gradient: 'from-tech-cyan/30 to-tech-purple/30',
+      title: '新聞漫畫 NewsToComic',
+      category: 'AI · 自動化',
+      description:
+        '從抓取新聞、AI 改寫劇本、生成三格圖到發布上線，全程無人介入。系統每四小時自行運行一次，端到端產出一則漫畫約 20 秒。',
+      technologies: ['Python', 'Gemini', 'ComfyUI', 'Next.js', 'Cloudflare R2'],
+      cover: {
+        src: newstocomicCover640,
+        srcSet: `${newstocomicCover640} 640w, ${newstocomicCover1280} 1280w`,
+      },
+      links: [{ label: '查看專案', url: 'https://www.news-to-comic.xyz/' }],
+      alt: '新聞漫畫專案畫面：兩支手機並排展示由新聞自動生成的三格漫畫',
+      lightbox: [
+        {
+          src: newstocomicFull,
+          alt: '新聞漫畫完整畫面：由新聞自動生成的三格漫畫',
+        },
+      ],
     },
     {
       id: 2,
-      title: '行動購物 App',
-      category: 'App',
-      description: '支援原生與跨平台開發的電商解決方案',
-      technologies: ['Android', 'iOS', 'Flutter'],
-      gradient: 'from-tech-purple/30 to-tech-cyan/30',
+      title: '蔬食綠洲 VegMap',
+      category: 'App · 雙平台',
+      description:
+        '社群共建的蔬食餐廳地圖。從 App、審核後台、Google Maps 解析到照片同步管線全套自建，同時上架 App Store 與 Google Play，雙平台合計 1000+ 下載。',
+      technologies: ['Flutter', 'Firebase', 'Cloudflare R2', 'Next.js', 'Google Maps'],
+      cover: {
+        src: vegmapCover640,
+        srcSet: `${vegmapCover640} 640w, ${vegmapCover1280} 1280w`,
+      },
+      links: [
+        {
+          label: 'Google Play',
+          url: 'https://play.google.com/store/apps/details?id=com.ccveg.app&hl=zh_TW',
+        },
+        {
+          label: 'App Store',
+          url: 'https://apps.apple.com/tw/app/id6758656462',
+        },
+      ],
+      alt: '蔬食綠洲 App 畫面：三支手機展示蔬食地圖、店家詳情與共編功能',
+      lightbox: [
+        { src: vegmapFull1, alt: '蔬食綠洲 App 畫面：地圖瀏覽' },
+        { src: vegmapFull2, alt: '蔬食綠洲 App 畫面：店家詳情' },
+        { src: vegmapFull3, alt: '蔬食綠洲 App 畫面：共編功能' },
+        { src: vegmapFull4, alt: '蔬食綠洲 App 畫面：功能一覽' },
+      ],
     },
     {
       id: 3,
-      title: '企業管理系統',
-      category: 'Web',
-      description: '客製化資訊系統平台',
-      technologies: ['React', 'Python', 'PostgreSQL'],
-      gradient: 'from-tech-cyan/30 to-tech-purple/30',
+      title: 'WBC 2026 台灣情報站',
+      category: 'Web · 2026 年賽事專案',
+      description:
+        '把 20 支國家隊的賽程、比分、中華隊陣容與複雜賽制，全部換算成台灣時間、翻成台灣球迷看得懂的內容。從動工到上線 8 天，賽期間每日多次更新。',
+      technologies: ['Next.js 15', 'React 19', 'TypeScript', 'Tailwind', 'Vercel'],
+      cover: {
+        src: wbcCover640,
+        srcSet: `${wbcCover640} 640w, ${wbcCover1280} 1280w`,
+      },
+      links: [{ label: '查看專案', url: 'https://www.wbc-tw.club/' }],
+      alt: 'WBC 2026 台灣情報站網站首頁畫面',
+      lightbox: [
+        { src: wbcFull1, alt: 'WBC 2026 台灣情報站首頁畫面' },
+        { src: wbcFull2, alt: 'WBC 2026 台灣情報站中華台北頁畫面' },
+      ],
     },
   ];
+
+  useEffect(() => {
+    if (!lightboxProject) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const focusTimer = window.setTimeout(() => {
+      lightboxCloseBtnRef.current?.focus();
+    }, 0);
+
+    const getFocusable = () => {
+      const root = lightboxDialogRef.current;
+      if (!root) return [];
+      return [
+        ...root.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        ),
+      ].filter((el) => !el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true');
+    };
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeLightbox();
+        return;
+      }
+
+      const images = lightboxProject.lightbox;
+      if (images.length > 1 && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+        // VegMap 用橫向滑動；WBC（2 張）用前後切換 + 左右鍵
+        if (images.length === 2) {
+          event.preventDefault();
+          setLightboxIndex((current) => {
+            if (event.key === 'ArrowLeft') {
+              return (current - 1 + images.length) % images.length;
+            }
+            return (current + 1) % images.length;
+          });
+        }
+      }
+
+      if (event.key === 'Tab') {
+        const focusable = getFocusable();
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey) {
+          if (document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          }
+        } else if (document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.clearTimeout(focusTimer);
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [lightboxProject, closeLightbox]);
 
   return (
     <div className="font-body bg-tech-dark text-tech-text page-load">
@@ -441,26 +600,38 @@ export default function App() {
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            我們的專案涵蓋電子商務平台、語音助手和多款手機應用程式。
-            每個專案都經過精心設計與開發，確保品質與使用者體驗。
+            我們的專案涵蓋 AI 自動化內容生產、雙平台行動應用，以及短交期的內容型網站。
+            以下三個案例都已實際上線，歡迎直接點開來看。
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
             {projects.map((project, index) => (
               <div
                 key={project.id}
-                className="project-card bg-tech-darker border-glow rounded-lg overflow-hidden"
+                className="project-card bg-tech-darker border-glow rounded-lg overflow-hidden h-full flex flex-col"
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
               >
-                {/* 專案截圖佔位符 */}
-                <div className={`h-48 bg-gradient-to-br ${project.gradient} flex items-center justify-center`}>
-                  <div className="text-6xl text-tech-cyan/50 font-heading font-bold">
-                    {project.title.charAt(0)}
-                  </div>
-                </div>
-                
-                <div className="p-6">
+                <button
+                  type="button"
+                  className="aspect-[4/3] overflow-hidden w-full block p-0 border-0 bg-transparent cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                  onClick={(event) => openLightbox(project, event.currentTarget)}
+                  aria-label={`查看${project.title}完整畫面`}
+                >
+                  <img
+                    src={project.cover.src}
+                    srcSet={project.cover.srcSet}
+                    sizes={PROJECT_COVER_SIZES}
+                    width={640}
+                    height={480}
+                    loading="lazy"
+                    decoding="async"
+                    alt={project.alt}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+
+                <div className="p-6 flex flex-col flex-1">
                   <div className="mb-2">
                     <span className="text-xs text-tech-purple font-semibold">{project.category}</span>
                   </div>
@@ -470,9 +641,24 @@ export default function App() {
                   <p className="text-tech-text text-sm mb-4 leading-relaxed">
                     {project.description}
                   </p>
-                  
+
+                  <div className="flex flex-wrap gap-3 mb-4">
+                    {project.links.map((link) => (
+                      <a
+                        key={link.url}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-tech-cyan hover:text-tech-purple transition-colors underline"
+                      >
+                        {link.label}
+                        <FaExternalLinkAlt className="text-xs" aria-hidden="true" />
+                      </a>
+                    ))}
+                  </div>
+
                   {/* 技術標籤 */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mt-auto">
                     {project.technologies.map((tech, techIndex) => (
                       <span key={techIndex} className="tech-tag">
                         {tech}
@@ -548,6 +734,111 @@ export default function App() {
           </p>
         </div>
       </footer>
+
+      {lightboxProject &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[100] bg-tech-dark/90 flex items-center justify-center p-0 md:p-6"
+            onClick={(event) => {
+              if (event.target === event.currentTarget) {
+                closeLightbox();
+              }
+            }}
+          >
+            <div
+              ref={lightboxDialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${lightboxProject.title}完整畫面`}
+              className="relative w-full h-full md:w-full md:max-w-5xl md:h-[90vh] bg-tech-darker border border-tech-cyan/30 md:rounded-lg shadow-2xl flex flex-col overflow-hidden"
+            >
+              <div className="flex items-center justify-between gap-4 px-4 py-3 border-b border-tech-cyan/20 shrink-0">
+                <p className="text-tech-cyan font-semibold truncate">{lightboxProject.title}</p>
+                <button
+                  ref={lightboxCloseBtnRef}
+                  type="button"
+                  onClick={closeLightbox}
+                  className="text-tech-text hover:text-tech-cyan p-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                  aria-label="關閉預覽"
+                >
+                  <FaTimes className="text-xl" aria-hidden="true" />
+                </button>
+              </div>
+
+              <div className="relative flex-1 min-h-0 overflow-hidden">
+                {lightboxProject.lightbox.length === 1 && (
+                  <div className="h-full overflow-y-auto p-4">
+                    <img
+                      src={lightboxProject.lightbox[0].src}
+                      alt={lightboxProject.lightbox[0].alt}
+                      className="block mx-auto max-w-full h-auto"
+                    />
+                  </div>
+                )}
+
+                {lightboxProject.lightbox.length > 2 && (
+                  <div className="h-full overflow-x-auto snap-x snap-mandatory flex gap-4 p-4 items-center">
+                    {lightboxProject.lightbox.map((image) => (
+                      <div
+                        key={image.src}
+                        className="snap-center shrink-0 w-[min(80vw,360px)] h-full flex items-center justify-center"
+                      >
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          className="max-h-full w-auto object-contain"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {lightboxProject.lightbox.length === 2 && (
+                  <div className="h-full flex items-center justify-center gap-2 p-4">
+                    <button
+                      type="button"
+                      className="shrink-0 text-tech-cyan hover:text-tech-purple p-3 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                      aria-label="上一張"
+                      onClick={() =>
+                        setLightboxIndex(
+                          (current) =>
+                            (current - 1 + lightboxProject.lightbox.length) %
+                            lightboxProject.lightbox.length
+                        )
+                      }
+                    >
+                      <FaChevronLeft className="text-2xl" aria-hidden="true" />
+                    </button>
+                    <img
+                      src={lightboxProject.lightbox[lightboxIndex].src}
+                      alt={lightboxProject.lightbox[lightboxIndex].alt}
+                      className="max-w-full max-h-full object-contain"
+                    />
+                    <button
+                      type="button"
+                      className="shrink-0 text-tech-cyan hover:text-tech-purple p-3 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                      aria-label="下一張"
+                      onClick={() =>
+                        setLightboxIndex(
+                          (current) => (current + 1) % lightboxProject.lightbox.length
+                        )
+                      }
+                    >
+                      <FaChevronRight className="text-2xl" aria-hidden="true" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {lightboxProject.lightbox.length === 2 && (
+                <p className="text-center text-tech-text/70 text-sm pb-3">
+                  {lightboxIndex + 1} / {lightboxProject.lightbox.length}
+                </p>
+              )}
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 }
