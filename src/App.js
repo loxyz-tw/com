@@ -84,11 +84,11 @@ export default function App() {
         srcSet: `${newstocomicCover640} 640w, ${newstocomicCover1280} 1280w`,
       },
       links: [{ label: '查看專案', url: 'https://www.news-to-comic.xyz/' }],
-      alt: '新聞漫畫專案畫面：兩支手機並排展示由新聞自動生成的三格漫畫',
+      alt: '新聞漫畫專案畫面：兩支手機展示由新聞自動生成的三格漫畫',
       lightbox: [
         {
           src: newstocomicFull,
-          alt: '新聞漫畫完整畫面：由新聞自動生成的三格漫畫',
+          alt: '由尼泊爾洪災新聞自動生成的三格漫畫',
         },
       ],
     },
@@ -133,10 +133,16 @@ export default function App() {
         srcSet: `${wbcCover640} 640w, ${wbcCover1280} 1280w`,
       },
       links: [{ label: '查看專案', url: 'https://www.wbc-tw.club/' }],
-      alt: 'WBC 2026 台灣情報站網站首頁畫面',
+      alt: 'WBC 2026 台灣情報站畫面：Pool C 五隊戰力雷達比較',
       lightbox: [
-        { src: wbcFull1, alt: 'WBC 2026 台灣情報站首頁畫面' },
-        { src: wbcFull2, alt: 'WBC 2026 台灣情報站中華台北頁畫面' },
+        {
+          src: wbcFull1,
+          alt: 'Pool C 五隊戰力雷達圖，比較日本、台灣、南韓、澳洲、捷克六項能力',
+        },
+        {
+          src: wbcFull2,
+          alt: '焦點球星頁面：全壘打王、打擊王、三振王排行',
+        },
       ],
     },
   ];
@@ -750,7 +756,11 @@ export default function App() {
               role="dialog"
               aria-modal="true"
               aria-label={`${lightboxProject.title}完整畫面`}
-              className="relative w-full h-full md:w-full md:max-w-5xl md:h-[90vh] bg-tech-darker border border-tech-cyan/30 md:rounded-lg shadow-2xl flex flex-col overflow-hidden"
+              className={`relative w-full md:w-full md:max-w-5xl bg-tech-darker border border-tech-cyan/30 md:rounded-lg shadow-2xl flex flex-col overflow-hidden ${
+                lightboxProject.lightbox.length === 2
+                  ? 'h-auto max-h-[100dvh] md:max-h-[90dvh]'
+                  : 'h-full md:h-[90vh]'
+              }`}
             >
               <div className="flex items-center justify-between gap-4 px-4 py-3 border-b border-tech-cyan/20 shrink-0">
                 <p className="text-tech-cyan font-semibold truncate">{lightboxProject.title}</p>
@@ -765,8 +775,8 @@ export default function App() {
                 </button>
               </div>
 
-              <div className="relative flex-1 min-h-0 overflow-hidden">
-                {lightboxProject.lightbox.length === 1 && (
+              {lightboxProject.lightbox.length === 1 && (
+                <div className="relative flex-1 min-h-0 overflow-hidden">
                   <div className="h-full overflow-y-auto p-4">
                     <img
                       src={lightboxProject.lightbox[0].src}
@@ -774,9 +784,11 @@ export default function App() {
                       className="block mx-auto max-w-full h-auto"
                     />
                   </div>
-                )}
+                </div>
+              )}
 
-                {lightboxProject.lightbox.length > 2 && (
+              {lightboxProject.lightbox.length > 2 && (
+                <div className="relative flex-1 min-h-0 overflow-hidden">
                   <div className="h-full overflow-x-auto snap-x snap-mandatory flex gap-4 p-4 items-center">
                     {lightboxProject.lightbox.map((image) => (
                       <div
@@ -791,13 +803,20 @@ export default function App() {
                       </div>
                     ))}
                   </div>
-                )}
+                </div>
+              )}
 
-                {lightboxProject.lightbox.length === 2 && (
-                  <div className="h-full flex items-center justify-center gap-2 p-4">
+              {lightboxProject.lightbox.length === 2 && (
+                <>
+                  <div className="relative p-3 md:p-4">
+                    <img
+                      src={lightboxProject.lightbox[lightboxIndex].src}
+                      alt={lightboxProject.lightbox[lightboxIndex].alt}
+                      className="block mx-auto max-w-full h-auto"
+                    />
                     <button
                       type="button"
-                      className="shrink-0 text-tech-cyan hover:text-tech-purple p-3 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                      className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-tech-darker"
                       aria-label="上一張"
                       onClick={() =>
                         setLightboxIndex(
@@ -807,16 +826,11 @@ export default function App() {
                         )
                       }
                     >
-                      <FaChevronLeft className="text-2xl" aria-hidden="true" />
+                      <FaChevronLeft className="text-xl" aria-hidden="true" />
                     </button>
-                    <img
-                      src={lightboxProject.lightbox[lightboxIndex].src}
-                      alt={lightboxProject.lightbox[lightboxIndex].alt}
-                      className="max-w-full max-h-full object-contain"
-                    />
                     <button
                       type="button"
-                      className="shrink-0 text-tech-cyan hover:text-tech-purple p-3 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                      className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-tech-darker"
                       aria-label="下一張"
                       onClick={() =>
                         setLightboxIndex(
@@ -824,16 +838,46 @@ export default function App() {
                         )
                       }
                     >
-                      <FaChevronRight className="text-2xl" aria-hidden="true" />
+                      <FaChevronRight className="text-xl" aria-hidden="true" />
                     </button>
                   </div>
-                )}
-              </div>
 
-              {lightboxProject.lightbox.length === 2 && (
-                <p className="text-center text-tech-text/70 text-sm pb-3">
-                  {lightboxIndex + 1} / {lightboxProject.lightbox.length}
-                </p>
+                  <div className="md:hidden flex items-center justify-center gap-6 px-4 py-3 border-t border-tech-cyan/20 shrink-0">
+                    <button
+                      type="button"
+                      className="flex w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                      aria-label="上一張"
+                      onClick={() =>
+                        setLightboxIndex(
+                          (current) =>
+                            (current - 1 + lightboxProject.lightbox.length) %
+                            lightboxProject.lightbox.length
+                        )
+                      }
+                    >
+                      <FaChevronLeft className="text-xl" aria-hidden="true" />
+                    </button>
+                    <span className="text-tech-text/80 text-sm tabular-nums min-w-[3rem] text-center">
+                      {lightboxIndex + 1} / {lightboxProject.lightbox.length}
+                    </span>
+                    <button
+                      type="button"
+                      className="flex w-11 h-11 items-center justify-center rounded-full bg-tech-dark/70 backdrop-blur text-tech-cyan hover:text-tech-purple hover:bg-tech-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                      aria-label="下一張"
+                      onClick={() =>
+                        setLightboxIndex(
+                          (current) => (current + 1) % lightboxProject.lightbox.length
+                        )
+                      }
+                    >
+                      <FaChevronRight className="text-xl" aria-hidden="true" />
+                    </button>
+                  </div>
+
+                  <p className="hidden md:block text-center text-tech-text/70 text-sm pb-3 shrink-0">
+                    {lightboxIndex + 1} / {lightboxProject.lightbox.length}
+                  </p>
+                </>
               )}
             </div>
           </div>,
