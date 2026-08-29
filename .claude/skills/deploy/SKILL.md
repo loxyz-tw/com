@@ -28,7 +28,17 @@ disable-model-invocation: true
 
 3. **本地預覽**
 
-   背景啟動 `npm start`，等它 compile 成功，然後告訴 Roy 開 http://localhost:3000 確認。有 $ARGUMENTS 描述本次改動時，明確指出要看哪幾個區塊。
+   背景啟動 `npm start`，等它 compile 成功，然後 agent 自己用 Chrome 自動化檢查，把結果呈現給 Roy，Roy 只需要看過點頭。有 $ARGUMENTS 描述本次改動時，明確指出要看哪幾個區塊。
+
+   預覽不能只是一張靜態截圖。至少涵蓋：
+
+   - desktop 與 mobile 兩種寬度的截圖
+   - 讀 console，確認沒有 error
+   - 實際操作導覽捲動與手機版選單，確認 react-scroll 正常
+   - 檢查對外連結沒有壞掉
+
+   Chrome 自動化不可用時，fallback：請 Roy 自己開 http://localhost:3000 確認。不可以因為工具不能用就跳過預覽。
+
    看完後把 dev server 關掉。
 
 4. **確認提交**

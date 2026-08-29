@@ -23,7 +23,7 @@ npm install       # 這台機器上可能還沒裝過
 ## 專案
 
 丰科有限公司（Fun Tech CO）形象官網。Create React App + Tailwind，單頁式，正式站 https://fun-tech.vip。
-網站絕大部分內容集中在 `src/App.js`（約 570 行）；`src/home.js` 與 `src/Portfolio.js` 是遺留的小檔案，動它們之前先確認有沒有被引用。
+網站絕大部分內容集中在 `src/App.js`（約 570 行）。
 
 ## 指令
 
@@ -53,6 +53,16 @@ Tailwind 的 `content` 只掃 `./src/**/*.{html,js,jsx}`——寫在 `src/` 之�
 
 介面文案一律繁體中文，`<html lang="zh-TW">`。
 
+## 視覺驗證
+
+改動任何 UI（`src/App.js`、`src/index.css`、`src/App.css`、Tailwind 設定）之後，不要只靠讀 code 判斷結果，必須實際看畫面。
+
+做法：背景啟動 `npm start`，等 compile 成功，用 Chrome 自動化開 `http://localhost:3000` 截圖確認。截圖是針對特定 tab 抓取，不受視窗焦點或遮擋影響，所以 Roy 可以同時用其他螢幕工作，不必把畫面讓出來。唯一限制是不要動到 agent 正在操作的那個分頁。
+
+檢查要涵蓋改動影響到的區塊；改到 layout 時一併看窄寬度（手機版）。
+
+確認完把 dev server 關掉，不要留背景 process。
+
 ## 測試
 
-`npm test` 目前是壞的：`src/App.test.js` 還是 CRA 樣板，斷言 `getByText(/learn react/i)`，但網站早就改成中文了。不要把它的失敗當成你改壞了東西。要驗證改動請用 `npm start` 目視確認。
+本專案沒有自動化測試。驗證改動請走「視覺驗證」那一節。
