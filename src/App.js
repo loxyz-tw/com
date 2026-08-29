@@ -27,9 +27,13 @@ import wbcCover640 from './images/projects/wbc-cover-640.webp';
 import wbcCover1280 from './images/projects/wbc-cover-1280.webp';
 import wbcFull1 from './images/projects/wbc-full-1.webp';
 import wbcFull2 from './images/projects/wbc-full-2.webp';
+import vegblogCover640 from './images/projects/vegblog-cover-640.webp';
+import vegblogCover1280 from './images/projects/vegblog-cover-1280.webp';
+import vegblogFull1 from './images/projects/vegblog-full-1.webp';
+import vegblogFull2 from './images/projects/vegblog-full-2.webp';
 
 const PROJECT_COVER_SIZES =
-  '(min-width: 1200px) 347px, (min-width: 1024px) calc((100vw - 152px) / 3), (min-width: 768px) calc((100vw - 120px) / 2), calc(100vw - 88px)';
+  '(min-width: 1200px) 536px, (min-width: 768px) calc((100vw - 120px) / 2), calc(100vw - 88px)';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -147,6 +151,32 @@ export default function App() {
         {
           src: wbcFull2,
           alt: '焦點球星頁面：全壘打王、打擊王、三振王排行',
+        },
+      ],
+    },
+    {
+      id: 4,
+      anchor: 'project-vegblog',
+      title: '蔬食知識庫',
+      category: 'Web · 內容平台',
+      description:
+        '以證據為本的素食營養知識站。AI 輔助生成初稿，但不能直接上線——發佈條件由程式強制把關：免責聲明、審閱日期、SEO 標題與摘要，以及至少兩筆引用來源缺一不可，內文的引用編號也不得超過實際登錄的來源數。',
+      services: ['AI 應用與流程自動化', '網頁平台設計'],
+      technologies: ['Next.js 14', 'PostgreSQL', 'Prisma', 'Cloud Run', 'Cloudflare R2'],
+      cover: {
+        src: vegblogCover640,
+        srcSet: `${vegblogCover640} 640w, ${vegblogCover1280} 1280w`,
+      },
+      links: [{ label: '查看專案', url: 'https://vegmap.app/' }],
+      alt: '蔬食知識庫網站畫面：四個內容分類與最新文章列表',
+      lightbox: [
+        {
+          src: vegblogFull1,
+          alt: '蔬食知識庫首頁：營養指南、保健評析、空汙議題、生活實踐四個分類與最新文章',
+        },
+        {
+          src: vegblogFull2,
+          alt: '蔬食知識庫文章內頁：內文與風險提醒段落',
         },
       ],
     },
@@ -592,8 +622,12 @@ export default function App() {
                 </div>
                 <p className="mt-auto pt-6 text-sm text-tech-text/80">
                   代表案例：
-                  <a href="#project-newstocomic" className="text-tech-cyan hover:text-tech-purple underline transition-colors">
+                  <a href="#project-newstocomic" className="text-tech-cyan hover:text-tech-purple underline transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan">
                     新聞漫畫 NewsToComic
+                  </a>
+                  、
+                  <a href="#project-vegblog" className="text-tech-cyan hover:text-tech-purple underline transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan">
+                    蔬食知識庫
                   </a>
                 </p>
               </div>
@@ -634,10 +668,10 @@ export default function App() {
             data-aos-delay="100"
           >
             我們的專案涵蓋 AI 自動化內容生產、雙平台行動應用，以及短交期的內容型網站。
-            以下三個案例都已實際上線，歡迎直接點開來看。
+            以下四個案例都已實際上線，歡迎直接點開來看。
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             {projects.map((project, index) => (
               <div
                 key={project.id}
