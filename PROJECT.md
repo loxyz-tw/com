@@ -9,7 +9,9 @@
 - **`master`** — 真正的原始碼（`src/`、`public/`、`package.json`、`tailwind.config.js`）。
 - **`gh-pages`** — `npm run deploy` 產生的 build 產物，由機器覆寫，GitHub Pages 從這裡供應網站。
 
-**工作目錄預設簽出在 `gh-pages`。** 在這個狀態下編輯 `index.html`、`static/js/main.*.js`、`asset-manifest.json` 等檔案毫無意義——下次 deploy 會整批 force-push 覆蓋掉。
+**工作目錄預設簽出在 `gh-pages`。** 在這個狀態下編輯 `index.html`、`static/js/main.*.js`、`asset-manifest.json` 等檔案毫無意義——下次 deploy 會把整個目錄內容換成新的 `build/` 產物。
+
+（補充：`gh-pages` 套件**預設不是 force-push**。它會 clone 遠端分支、清掉舊檔、複製新的 `build/`、在既有歷史上新增一個 commit，然後一般 push。分支歷史是保留的，只有加 `--no-history` 才會 force。）
 
 要改任何東西，先切分支並安裝依賴：
 
