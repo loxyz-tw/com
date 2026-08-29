@@ -346,3 +346,15 @@ code {
   color: #00d4ff;
   margin: 4px;
 }
+
+/* 對應服務標籤（與技術標籤區隔） */
+.service-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.45);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: #c4b5fd;
+  margin: 4px;
+}

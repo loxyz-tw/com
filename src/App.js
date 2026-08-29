@@ -5,7 +5,7 @@ import {
   FaMobileAlt,
   FaGlobe,
   FaCog,
-  FaMicrophone,
+  FaRobot,
   FaEnvelope,
   FaMapMarkerAlt,
   FaExternalLinkAlt,
@@ -33,7 +33,6 @@ const PROJECT_COVER_SIZES =
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [hoveredCard, setHoveredCard] = useState(null);
   const [lightboxProject, setLightboxProject] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const lightboxTriggerRef = useRef(null);
@@ -74,10 +73,12 @@ export default function App() {
   const projects = [
     {
       id: 1,
+      anchor: 'project-newstocomic',
       title: '新聞漫畫 NewsToComic',
       category: 'AI · 自動化',
       description:
-        '從抓取新聞、AI 改寫劇本、生成三格圖到發布上線，全程無人介入。系統每四小時自行運行一次，端到端產出一則漫畫約 20 秒。',
+        '從抓取新聞、AI 改寫劇本、生成三格圖到發布上線，串成一條可一鍵執行的自動化管線，端到端產出一則漫畫約 20 秒。',
+      services: ['AI 應用與流程自動化', '網頁平台設計'],
       technologies: ['Python', 'Gemini', 'ComfyUI', 'Next.js', 'Cloudflare R2'],
       cover: {
         src: newstocomicCover640,
@@ -94,10 +95,12 @@ export default function App() {
     },
     {
       id: 2,
+      anchor: 'project-vegmap',
       title: '蔬食綠洲 VegMap',
       category: 'App · 雙平台',
       description:
         '社群共建的蔬食餐廳地圖。從 App、審核後台、Google Maps 解析到照片同步管線全套自建，同時上架 App Store 與 Google Play，雙平台合計 1000+ 下載。',
+      services: ['手機 App 開發', '資訊系統建置'],
       technologies: ['Flutter', 'Firebase', 'Cloudflare R2', 'Next.js', 'Google Maps'],
       cover: {
         src: vegmapCover640,
@@ -123,10 +126,12 @@ export default function App() {
     },
     {
       id: 3,
+      anchor: 'project-wbc',
       title: 'WBC 2026 台灣情報站',
       category: 'Web · 2026 年賽事專案',
       description:
-        '把 20 支國家隊的賽程、比分、中華隊陣容與複雜賽制，全部換算成台灣時間、翻成台灣球迷看得懂的內容。從動工到上線 8 天，賽期間每日多次更新。',
+        '把 20 支國家隊的賽程、比分、中華隊陣容與複雜賽制，全部換算成台灣時間、翻成台灣球迷看得懂的內容。一天內完成並趕在開賽前上線，小組賽期間每日多次更新比分。',
+      services: ['網頁平台設計'],
       technologies: ['Next.js 15', 'React 19', 'TypeScript', 'Tailwind', 'Vercel'],
       cover: {
         src: wbcCover640,
@@ -146,6 +151,21 @@ export default function App() {
       ],
     },
   ];
+
+  // SPA 深連結：首屏渲染後再依 hash 捲動（原生 hash scroll 時目標節點尚不存在）
+  useEffect(() => {
+    const scrollToHash = () => {
+      const id = window.location.hash.replace(/^#/, '');
+      if (!id) return;
+      document.getElementById(id)?.scrollIntoView();
+    };
+    const timer = window.setTimeout(scrollToHash, 50);
+    window.addEventListener('hashchange', scrollToHash);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('hashchange', scrollToHash);
+    };
+  }, []);
 
   useEffect(() => {
     if (!lightboxProject) return undefined;
@@ -450,16 +470,14 @@ export default function App() {
             服務項目
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             {/* 服務卡片 1 */}
             <div 
-              className="bg-tech-darker border-glow rounded-lg p-8 card-expand relative overflow-hidden"
+              className="bg-tech-darker border-glow rounded-lg p-8 card-expand relative overflow-hidden h-full flex flex-col"
               data-aos="fade-up"
               data-aos-delay="0"
-              onMouseEnter={() => setHoveredCard(1)}
-              onMouseLeave={() => setHoveredCard(null)}
             >
-              <div className="relative z-10">
+              <div className="relative z-10 flex flex-col flex-1">
                 <div className="w-16 h-16 bg-tech-cyan/20 rounded-full flex items-center justify-center mb-6 icon-rotate">
                   <FaMobileAlt className="text-3xl text-tech-cyan" />
                 </div>
@@ -469,27 +487,29 @@ export default function App() {
                 <p className="text-tech-text leading-relaxed mb-4">
                   提供 iOS 和 Android 原生及跨平台應用開發服務，打造流暢的使用者體驗。
                 </p>
-                {hoveredCard === 1 && (
-                  <div className="mt-4 pt-4 border-t border-tech-cyan/20">
-                    <p className="text-sm text-tech-text/80">
-                      • Swift / Kotlin 原生開發<br />
-                      • Flutter 跨平台開發<br />
-                      • App Store / Google Play 上架服務
-                    </p>
-                  </div>
-                )}
+                <div className="mt-4 pt-4 border-t border-tech-cyan/20">
+                  <p className="text-sm text-tech-text/80">
+                    • Swift / Kotlin 原生開發<br />
+                    • Flutter 跨平台開發<br />
+                    • App Store / Google Play 上架服務
+                  </p>
+                </div>
+                <p className="mt-auto pt-6 text-sm text-tech-text/80">
+                  代表案例：
+                  <a href="#project-vegmap" className="text-tech-cyan hover:text-tech-purple underline transition-colors">
+                    蔬食綠洲 VegMap
+                  </a>
+                </p>
               </div>
             </div>
 
             {/* 服務卡片 2 */}
             <div 
-              className="bg-tech-darker border-glow rounded-lg p-8 card-expand relative overflow-hidden"
+              className="bg-tech-darker border-glow rounded-lg p-8 card-expand relative overflow-hidden h-full flex flex-col"
               data-aos="fade-up"
               data-aos-delay="100"
-              onMouseEnter={() => setHoveredCard(2)}
-              onMouseLeave={() => setHoveredCard(null)}
             >
-              <div className="relative z-10">
+              <div className="relative z-10 flex flex-col flex-1">
                 <div className="w-16 h-16 bg-tech-cyan/20 rounded-full flex items-center justify-center mb-6 icon-rotate">
                   <FaGlobe className="text-3xl text-tech-cyan" />
                 </div>
@@ -499,27 +519,29 @@ export default function App() {
                 <p className="text-tech-text leading-relaxed mb-4">
                   響應式網頁設計與開發，建立現代化、高效能的網路平台。
                 </p>
-                {hoveredCard === 2 && (
-                  <div className="mt-4 pt-4 border-t border-tech-cyan/20">
-                    <p className="text-sm text-tech-text/80">
-                      • React / Vue.js 前端開發<br />
-                      • Node.js / Python 後端開發<br />
-                      • 雲端部署與 DevOps 服務
-                    </p>
-                  </div>
-                )}
+                <div className="mt-4 pt-4 border-t border-tech-cyan/20">
+                  <p className="text-sm text-tech-text/80">
+                    • React / Vue.js 前端開發<br />
+                    • Node.js / Python 後端開發<br />
+                    • 雲端部署與 DevOps 服務
+                  </p>
+                </div>
+                <p className="mt-auto pt-6 text-sm text-tech-text/80">
+                  代表案例：
+                  <a href="#project-wbc" className="text-tech-cyan hover:text-tech-purple underline transition-colors">
+                    WBC 2026 台灣情報站
+                  </a>
+                </p>
               </div>
             </div>
 
             {/* 服務卡片 3 */}
             <div 
-              className="bg-tech-darker border-glow rounded-lg p-8 card-expand relative overflow-hidden"
+              className="bg-tech-darker border-glow rounded-lg p-8 card-expand relative overflow-hidden h-full flex flex-col"
               data-aos="fade-up"
               data-aos-delay="200"
-              onMouseEnter={() => setHoveredCard(3)}
-              onMouseLeave={() => setHoveredCard(null)}
             >
-              <div className="relative z-10">
+              <div className="relative z-10 flex flex-col flex-1">
                 <div className="w-16 h-16 bg-tech-cyan/20 rounded-full flex items-center justify-center mb-6 icon-rotate">
                   <FaCog className="text-3xl text-tech-cyan" />
                 </div>
@@ -529,45 +551,51 @@ export default function App() {
                 <p className="text-tech-text leading-relaxed mb-4">
                   客製化資訊系統開發，協助企業數位轉型與流程優化。
                 </p>
-                {hoveredCard === 3 && (
-                  <div className="mt-4 pt-4 border-t border-tech-cyan/20">
-                    <p className="text-sm text-tech-text/80">
-                      • ERP / CRM 系統開發<br />
-                      • 資料庫設計與優化<br />
-                      • API 整合與系統維護
-                    </p>
-                  </div>
-                )}
+                <div className="mt-4 pt-4 border-t border-tech-cyan/20">
+                  <p className="text-sm text-tech-text/80">
+                    • ERP / CRM 系統開發<br />
+                    • 資料庫設計與優化<br />
+                    • API 整合與系統維護
+                  </p>
+                </div>
+                <p className="mt-auto pt-6 text-sm text-tech-text/80">
+                  代表案例：
+                  <a href="#project-vegmap" className="text-tech-cyan hover:text-tech-purple underline transition-colors">
+                    蔬食綠洲 VegMap
+                  </a>
+                </p>
               </div>
             </div>
 
             {/* 服務卡片 4 */}
             <div 
-              className="bg-tech-darker border-glow rounded-lg p-8 card-expand relative overflow-hidden"
+              className="bg-tech-darker border-glow rounded-lg p-8 card-expand relative overflow-hidden h-full flex flex-col"
               data-aos="fade-up"
               data-aos-delay="300"
-              onMouseEnter={() => setHoveredCard(4)}
-              onMouseLeave={() => setHoveredCard(null)}
             >
-              <div className="relative z-10">
+              <div className="relative z-10 flex flex-col flex-1">
                 <div className="w-16 h-16 bg-tech-cyan/20 rounded-full flex items-center justify-center mb-6 icon-rotate">
-                  <FaMicrophone className="text-3xl text-tech-cyan" />
+                  <FaRobot className="text-3xl text-tech-cyan" />
                 </div>
                 <h3 className="text-2xl font-body font-semibold text-tech-cyan mb-4">
-                  語音 AI 模型應用
+                  AI 應用與流程自動化
                 </h3>
                 <p className="text-tech-text leading-relaxed mb-4">
-                  整合語音辨識與 AI 技術，開發智能語音助手與相關應用。
+                  將生成式 AI 與既有流程接起來，打造可一鍵執行、具備排程能力的自動化管線。
                 </p>
-                {hoveredCard === 4 && (
-                  <div className="mt-4 pt-4 border-t border-tech-cyan/20">
-                    <p className="text-sm text-tech-text/80">
-                      • 語音辨識與合成<br />
-                      • 自然語言處理 (NLP)<br />
-                      • 機器學習模型整合
-                    </p>
-                  </div>
-                )}
+                <div className="mt-4 pt-4 border-t border-tech-cyan/20">
+                  <p className="text-sm text-tech-text/80">
+                    • 生成式 AI 內容工作流<br />
+                    • 排程、資料管線與成本控管<br />
+                    • 語音辨識與模型整合
+                  </p>
+                </div>
+                <p className="mt-auto pt-6 text-sm text-tech-text/80">
+                  代表案例：
+                  <a href="#project-newstocomic" className="text-tech-cyan hover:text-tech-purple underline transition-colors">
+                    新聞漫畫 NewsToComic
+                  </a>
+                </p>
               </div>
             </div>
 
@@ -581,8 +609,7 @@ export default function App() {
                 協助申請安卓 App 正式版權限
               </h3>
               <p className="text-tech-text leading-relaxed">
-                我們協助新開發者申請 Android App 正式版權限流程，包含完成 20 人封測及 14 天測試期，以符合上架要求。
-                從文件準備到審核通過，我們提供全程協助服務。
+                我們協助新開發者完成 Google Play 封閉測試與正式版權限申請，從封閉測試規劃、測試者管理與回饋彙整，到文件準備與審核通過提供全程協助。
               </p>
             </div>
           </div>
@@ -614,62 +641,76 @@ export default function App() {
             {projects.map((project, index) => (
               <div
                 key={project.id}
-                className="project-card bg-tech-darker border-glow rounded-lg overflow-hidden h-full flex flex-col"
-                data-aos="fade-up"
-                data-aos-delay={index * 100}
+                id={project.anchor}
+                className="scroll-mt-24 h-full"
               >
-                <button
-                  type="button"
-                  className="aspect-[4/3] overflow-hidden w-full block p-0 border-0 bg-transparent cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
-                  onClick={(event) => openLightbox(project, event.currentTarget)}
-                  aria-label={`查看${project.title}完整畫面`}
+                <div
+                  className="project-card bg-tech-darker border-glow rounded-lg overflow-hidden h-full flex flex-col"
+                  data-aos="fade-up"
+                  data-aos-delay={index * 100}
                 >
-                  <img
-                    src={project.cover.src}
-                    srcSet={project.cover.srcSet}
-                    sizes={PROJECT_COVER_SIZES}
-                    width={640}
-                    height={480}
-                    loading="lazy"
-                    decoding="async"
-                    alt={project.alt}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
+                  <button
+                    type="button"
+                    className="aspect-[4/3] overflow-hidden w-full block p-0 border-0 bg-transparent cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                    onClick={(event) => openLightbox(project, event.currentTarget)}
+                    aria-label={`查看${project.title}完整畫面`}
+                  >
+                    <img
+                      src={project.cover.src}
+                      srcSet={project.cover.srcSet}
+                      sizes={PROJECT_COVER_SIZES}
+                      width={640}
+                      height={480}
+                      loading="lazy"
+                      decoding="async"
+                      alt={project.alt}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
 
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="mb-2">
-                    <span className="text-xs text-tech-purple font-semibold">{project.category}</span>
-                  </div>
-                  <h3 className="text-xl font-body font-semibold text-tech-cyan mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-tech-text text-sm mb-4 leading-relaxed">
-                    {project.description}
-                  </p>
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="mb-2">
+                      <span className="text-xs text-tech-purple font-semibold">{project.category}</span>
+                    </div>
+                    <h3 className="text-xl font-body font-semibold text-tech-cyan mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="text-tech-text text-sm mb-4 leading-relaxed">
+                      {project.description}
+                    </p>
 
-                  <div className="flex flex-wrap gap-3 mb-4">
-                    {project.links.map((link) => (
-                      <a
-                        key={link.url}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm text-tech-cyan hover:text-tech-purple transition-colors underline"
-                      >
-                        {link.label}
-                        <FaExternalLinkAlt className="text-xs" aria-hidden="true" />
-                      </a>
-                    ))}
-                  </div>
+                    <div className="flex flex-wrap gap-3 mb-4">
+                      {project.links.map((link) => (
+                        <a
+                          key={link.url}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-sm text-tech-cyan hover:text-tech-purple transition-colors underline"
+                        >
+                          {link.label}
+                          <FaExternalLinkAlt className="text-xs" aria-hidden="true" />
+                        </a>
+                      ))}
+                    </div>
 
-                  {/* 技術標籤 */}
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    {project.technologies.map((tech, techIndex) => (
-                      <span key={techIndex} className="tech-tag">
-                        {tech}
-                      </span>
-                    ))}
+                    <div className="mt-auto">
+                      <p className="text-xs text-tech-text/60 mb-1">對應服務</p>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {project.services.map((service) => (
+                          <span key={service} className="service-tag">
+                            {service}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {project.technologies.map((tech, techIndex) => (
+                          <span key={techIndex} className="tech-tag">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
