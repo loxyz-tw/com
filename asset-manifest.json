@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.c490ed06.css",
-    "main.js": "/static/js/main.0119c474.js",
+    "main.css": "/static/css/main.07e582eb.css",
+    "main.js": "/static/js/main.e172ce77.js",
     "static/js/453.fbc15508.chunk.js": "/static/js/453.fbc15508.chunk.js",
     "static/media/newstocomic-full.webp": "/static/media/newstocomic-full.40b64814eb340769860a.webp",
     "static/media/vegblog-full-2.webp": "/static/media/vegblog-full-2.e915a94501e5902a14a7.webp",
@@ -21,12 +21,12 @@
     "static/media/vegblog-cover-640.webp": "/static/media/vegblog-cover-640.7e70219bff58ebeb1a10.webp",
     "static/media/wbc-cover-640.webp": "/static/media/wbc-cover-640.12a2a1520be48800b394.webp",
     "index.html": "/index.html",
-    "main.c490ed06.css.map": "/static/css/main.c490ed06.css.map",
-    "main.0119c474.js.map": "/static/js/main.0119c474.js.map",
+    "main.07e582eb.css.map": "/static/css/main.07e582eb.css.map",
+    "main.e172ce77.js.map": "/static/js/main.e172ce77.js.map",
     "453.fbc15508.chunk.js.map": "/static/js/453.fbc15508.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c490ed06.css",
-    "static/js/main.0119c474.js"
+    "static/css/main.07e582eb.css",
+    "static/js/main.e172ce77.js"
   ]
 }
