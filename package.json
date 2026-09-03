@@ -21,6 +21,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "postbuild": "node scripts/prerender.js",
+    "og-image": "node scripts/make-og-image.js",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",

@@ -1,0 +1,24 @@
+# 內容需與 src/data/ 同步。本檔為實驗性短版，非正式標準。
+
+# 丰科有限公司 Fun Tech CO
+
+> 位於新北市中和區的軟體開發公司，提供 iOS/Android App、網站平台、客製化資訊系統與生成式 AI 流程自動化開發。
+
+## 服務
+
+- 手機 App 開發
+- 網頁平台設計
+- 資訊系統建置
+- AI 應用與流程自動化
+
+## 案例
+
+- 新聞漫畫 NewsToComic — https://www.news-to-comic.xyz/
+- 蔬食綠洲 VegMap — https://play.google.com/store/apps/details?id=com.ccveg.app&hl=zh_TW 、 https://apps.apple.com/tw/app/id6758656462
+- WBC 2026 台灣情報站 — https://www.wbc-tw.club/
+- 蔬食知識庫 — https://vegmap.app/
+
+## 聯絡
+
+Email：app@fun-tech.vip
+地址：新北市中和區中原二街28號18樓
