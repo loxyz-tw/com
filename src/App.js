@@ -482,7 +482,7 @@ export default function App() {
 
           <div className="max-w-4xl mx-auto text-center" data-aos="fade-in">
             <p className="text-lg md:text-xl text-tech-text leading-relaxed mb-6">
-              丰科有限公司（Fun Tech CO）是位於新北市中和區的軟體開發公司，提供 iOS/Android App、網站平台、客製化資訊系統與生成式 AI 流程自動化開發。已上線案例包含蔬食綠洲 VegMap（雙平台合計 1000+ 下載）、WBC 2026 台灣情報站、新聞漫畫 NewsToComic 與蔬食知識庫。
+              丰科有限公司（Fun Tech CO）是位於台灣的軟體開發公司，提供 iOS/Android App、網站平台、客製化資訊系統與生成式 AI 流程自動化開發。已上線案例包含蔬食綠洲 VegMap（雙平台合計 1000+ 下載）、WBC 2026 台灣情報站、新聞漫畫 NewsToComic 與蔬食知識庫。
             </p>
             <p className="text-lg md:text-xl text-tech-text leading-relaxed">
               我們相信技術應該服務於人。每個專案都經過精心設計與開發，確保品質、效能與使用者體驗的平衡。
