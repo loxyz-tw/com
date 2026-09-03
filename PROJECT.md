@@ -80,3 +80,10 @@ Chrome 自動化在這裡有三個坑，會讓你以為程式壞了、其實是�
 ## 測試
 
 本專案沒有自動化測試。驗證改動請走「視覺驗證」那一節。
+
+## SEO 資產維護
+
+- 改頁面內容、服務、案例或 FAQ 後，同步更新 `src/data/site.js` 的 `CONTENT_UPDATED_AT`（`YYYY-MM-DD`），以及 `public/sitemap.xml` 的 `<lastmod>`，兩者必須相同；並檢查 `public/llms.txt` 是否仍與 `src/data/` 一致。
+- `npm run build` 會跑 `postbuild`：`scripts/prerender.js` 與 `scripts/check-seo.js`。任一失敗即整次 build 失敗，不要略過。
+- 需要重產 Open Graph 圖時執行 `npm run og-image`（輸出 `public/og-image.png`，記得一併提交）。
+- Hydration 規則：首次 render 路徑不得使用 `Date`、`Math.random`、`window`、`document`（`useEffect` 內除外）。文案若混有變數，請用單一 template string，避免被序列化成一個 text node 後 hydration 對不上。

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom';
 import { Link } from 'react-scroll';
 import AOS from 'aos';
-import { COPYRIGHT_YEAR } from './data/site';
 import {
   FaMobileAlt,
   FaGlobe,
@@ -15,6 +14,10 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from 'react-icons/fa';
+import { COPYRIGHT_YEAR, CONTENT_UPDATED_AT, EMAIL, ADDRESS_FULL } from './data/site';
+import { PROJECTS as PROJECT_DATA } from './data/projects';
+import { FAQS } from './data/faqs';
+import StructuredData from './seo/StructuredData';
 
 import newstocomicCover640 from './images/projects/newstocomic-cover-640.webp';
 import newstocomicCover1280 from './images/projects/newstocomic-cover-1280.webp';
@@ -37,6 +40,37 @@ import vegblogFull2 from './images/projects/vegblog-full-2.webp';
 const PROJECT_COVER_SIZES =
   '(min-width: 1200px) 536px, (min-width: 768px) calc((100vw - 120px) / 2), calc(100vw - 88px)';
 
+const PROJECT_IMAGES = {
+  1: {
+    cover: {
+      src: newstocomicCover640,
+      srcSet: `${newstocomicCover640} 640w, ${newstocomicCover1280} 1280w`,
+    },
+    lightbox: [newstocomicFull],
+  },
+  2: {
+    cover: {
+      src: vegmapCover640,
+      srcSet: `${vegmapCover640} 640w, ${vegmapCover1280} 1280w`,
+    },
+    lightbox: [vegmapFull1, vegmapFull2, vegmapFull3, vegmapFull4],
+  },
+  3: {
+    cover: {
+      src: wbcCover640,
+      srcSet: `${wbcCover640} 640w, ${wbcCover1280} 1280w`,
+    },
+    lightbox: [wbcFull1, wbcFull2],
+  },
+  4: {
+    cover: {
+      src: vegblogCover640,
+      srcSet: `${vegblogCover640} 640w, ${vegblogCover1280} 1280w`,
+    },
+    lightbox: [vegblogFull1, vegblogFull2],
+  },
+};
+
 const PARTICLE_SEED = 20260903;
 let aosInitialized = false;
 
@@ -47,6 +81,11 @@ function mulberry32(a) {
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
+}
+
+function formatContentUpdatedAt(iso) {
+  const [year, month] = iso.split('-');
+  return `${year} 年 ${Number(month)} 月`;
 }
 
 export default function App() {
@@ -100,118 +139,17 @@ export default function App() {
     }
   }, []);
 
-  // 專案數據
-  const projects = [
-    {
-      id: 1,
-      anchor: 'project-newstocomic',
-      title: '新聞漫畫 NewsToComic',
-      category: 'AI · 自動化',
-      description:
-        '從抓取新聞、AI 改寫劇本、生成三格圖到發布上線，串成一條可一鍵執行的自動化管線，端到端產出一則漫畫約 20 秒。',
-      services: ['AI 應用與流程自動化', '網頁平台設計'],
-      technologies: ['Python', 'Gemini', 'ComfyUI', 'Next.js', 'Cloudflare R2'],
-      cover: {
-        src: newstocomicCover640,
-        srcSet: `${newstocomicCover640} 640w, ${newstocomicCover1280} 1280w`,
-      },
-      links: [{ label: '查看專案', url: 'https://www.news-to-comic.xyz/' }],
-      alt: '新聞漫畫專案畫面：兩支手機展示由新聞自動生成的三格漫畫',
-      lightboxLayout: 'scroll',
-      lightbox: [
-        {
-          src: newstocomicFull,
-          alt: '由尼泊爾洪災新聞自動生成的三格漫畫',
-        },
-      ],
-    },
-    {
-      id: 2,
-      anchor: 'project-vegmap',
-      title: '蔬食綠洲 VegMap',
-      category: 'App · 雙平台',
-      description:
-        '社群共建的蔬食餐廳地圖。從 App、審核後台、Google Maps 解析到照片同步管線全套自建，同時上架 App Store 與 Google Play，雙平台合計 1000+ 下載。',
-      services: ['手機 App 開發', '資訊系統建置'],
-      technologies: ['Flutter', 'Firebase', 'Cloudflare R2', 'Next.js', 'Google Maps'],
-      cover: {
-        src: vegmapCover640,
-        srcSet: `${vegmapCover640} 640w, ${vegmapCover1280} 1280w`,
-      },
-      links: [
-        {
-          label: 'Google Play',
-          url: 'https://play.google.com/store/apps/details?id=com.ccveg.app&hl=zh_TW',
-        },
-        {
-          label: 'App Store',
-          url: 'https://apps.apple.com/tw/app/id6758656462',
-        },
-      ],
-      alt: '蔬食綠洲 App 畫面：三支手機展示蔬食地圖、店家詳情與共編功能',
-      lightboxLayout: 'swipe',
-      lightbox: [
-        { src: vegmapFull1, alt: '蔬食綠洲 App 畫面：地圖瀏覽' },
-        { src: vegmapFull2, alt: '蔬食綠洲 App 畫面：店家詳情' },
-        { src: vegmapFull3, alt: '蔬食綠洲 App 畫面：共編功能' },
-        { src: vegmapFull4, alt: '蔬食綠洲 App 畫面：功能一覽' },
-      ],
-    },
-    {
-      id: 3,
-      anchor: 'project-wbc',
-      title: 'WBC 2026 台灣情報站',
-      category: 'Web · 2026 年賽事專案',
-      description:
-        '把 20 支國家隊的賽程、比分、中華隊陣容與複雜賽制，全部換算成台灣時間、翻成台灣球迷看得懂的內容。一天內完成並趕在開賽前上線，小組賽期間每日多次更新比分。',
-      services: ['網頁平台設計'],
-      technologies: ['Next.js 15', 'React 19', 'TypeScript', 'Tailwind', 'Vercel'],
-      cover: {
-        src: wbcCover640,
-        srcSet: `${wbcCover640} 640w, ${wbcCover1280} 1280w`,
-      },
-      links: [{ label: '查看專案', url: 'https://www.wbc-tw.club/' }],
-      alt: 'WBC 2026 台灣情報站畫面：Pool C 五隊戰力雷達比較',
-      lightboxLayout: 'fit',
-      lightbox: [
-        {
-          src: wbcFull1,
-          alt: 'Pool C 五隊戰力雷達圖，比較日本、台灣、南韓、澳洲、捷克六項能力',
-        },
-        {
-          src: wbcFull2,
-          alt: '焦點球星頁面：全壘打王、打擊王、三振王排行',
-        },
-      ],
-    },
-    {
-      id: 4,
-      anchor: 'project-vegblog',
-      title: '蔬食知識庫',
-      category: 'Web · 內容平台',
-      description:
-        '以證據為本的素食營養知識站。AI 輔助生成初稿，但不能直接上線——發佈條件由程式強制把關：免責聲明、審閱日期、SEO 標題與摘要，以及至少兩筆引用來源缺一不可，內文的引用編號也不得超過實際登錄的來源數。',
-      services: ['AI 應用與流程自動化', '網頁平台設計'],
-      technologies: ['Next.js 14', 'PostgreSQL', 'Prisma', 'Cloud Run', 'Cloudflare R2'],
-      cover: {
-        src: vegblogCover640,
-        srcSet: `${vegblogCover640} 640w, ${vegblogCover1280} 1280w`,
-      },
-      links: [{ label: '查看專案', url: 'https://vegmap.app/' }],
-      alt: '蔬食知識庫網站首屏：站名、以證據為本的素食營養與生活指南標題與行動按鈕',
-      lightboxLayout: 'scroll',
-      lightbox: [
-        {
-          src: vegblogFull1,
-          alt: '蔬食知識庫首屏：站名、以證據為本的素食營養與生活指南標題與行動按鈕',
-        },
-        {
-          src: vegblogFull2,
-          alt: '蔬食知識庫最新文章區：六篇文章卡片，副標註明每篇附參考來源與審閱紀錄',
-        },
-      ],
-    },
-  ];
+  const projects = PROJECT_DATA.map((project) => {
+    const images = PROJECT_IMAGES[project.id];
+    return {
+      ...project,
+      cover: images.cover,
+      lightbox: project.lightboxAlts.map((alt, index) => ({
+        src: images.lightbox[index],
+        alt,
+      })),
+    };
+  });
 
   // SPA 深連結：首屏渲染後再依 hash 捲動（原生 hash scroll 時目標節點尚不存在）
   useEffect(() => {
@@ -317,6 +255,7 @@ export default function App() {
 
   return (
     <div className="font-body bg-tech-dark text-tech-text page-load">
+      <StructuredData />
       {/* 導航欄 */}
       <nav className="fixed top-0 w-full bg-tech-darker/80 backdrop-blur-md shadow-lg z-50 border-b border-tech-cyan/20">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -357,6 +296,14 @@ export default function App() {
               className="nav-link text-tech-text hover:text-tech-cyan cursor-pointer transition-colors"
             >
               專案成果
+            </Link>
+            <Link 
+              to="faq" 
+              smooth={true} 
+              duration={500} 
+              className="nav-link text-tech-text hover:text-tech-cyan cursor-pointer transition-colors"
+            >
+              常見問題
             </Link>
             <Link 
               to="contact" 
@@ -425,6 +372,15 @@ export default function App() {
                 專案成果
               </Link>
               <Link 
+                to="faq" 
+                smooth={true} 
+                duration={500} 
+                onClick={toggleMobileMenu}
+                className="block nav-link text-tech-text hover:text-tech-cyan cursor-pointer transition-colors"
+              >
+                常見問題
+              </Link>
+              <Link 
                 to="contact" 
                 smooth={true} 
                 duration={500} 
@@ -459,7 +415,7 @@ export default function App() {
             丰科有限公司
           </h1>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-semibold text-tech-text mb-6">
-            專業 App、網站與 AI 應用開發
+            新北中和的 App、網站與 AI 應用開發團隊
           </h2>
           <p className="mt-4 text-lg md:text-xl text-tech-text/80 mb-10 max-w-2xl mx-auto leading-relaxed">
             我們致力於將創新想法轉化為現實，提供從概念到上線的完整開發服務
@@ -526,14 +482,10 @@ export default function App() {
 
           <div className="max-w-4xl mx-auto text-center" data-aos="fade-in">
             <p className="text-lg md:text-xl text-tech-text leading-relaxed mb-6">
-              我們的團隊擁有豐富的經驗，專注於提供創新解決方案，滿足客戶需求。
-              <br />
-              從行動應用開發到 AI 技術整合，我們致力於將您的想法轉化為現實。
+              丰科有限公司（Fun Tech CO）是位於新北市中和區的軟體開發公司，提供 iOS/Android App、網站平台、客製化資訊系統與生成式 AI 流程自動化開發。已上線案例包含蔬食綠洲 VegMap（雙平台合計 1000+ 下載）、WBC 2026 台灣情報站、新聞漫畫 NewsToComic 與蔬食知識庫。
             </p>
             <p className="text-lg md:text-xl text-tech-text leading-relaxed">
-              我們相信技術應該服務於人，每個專案都經過精心設計與開發，
-              <br />
-              確保品質、效能與使用者體驗的完美平衡。
+              我們相信技術應該服務於人。每個專案都經過精心設計與開發，確保品質、效能與使用者體驗的平衡。
             </p>
           </div>
         </div>
@@ -715,12 +667,19 @@ export default function App() {
             專案成果
           </h2>
           <p 
-            className="text-center text-tech-text/80 mb-12 max-w-2xl mx-auto"
+            className="text-center text-tech-text/80 mb-4 max-w-2xl mx-auto"
             data-aos="fade-up"
             data-aos-delay="100"
           >
             我們的專案涵蓋 AI 自動化內容生產、雙平台行動應用，以及短交期的內容型網站。
             以下四個案例都已實際上線，歡迎直接點開來看。
+          </p>
+          <p
+            className="text-center text-tech-text/60 text-sm mb-12"
+            data-aos="fade-up"
+            data-aos-delay="150"
+          >
+            {`內容最後更新：${formatContentUpdatedAt(CONTENT_UPDATED_AT)}`}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
@@ -808,6 +767,37 @@ export default function App() {
       {/* 分隔線 */}
       <div className="section-divider" />
 
+      {/* 常見問題 */}
+      <section id="faq" className="py-24 md:py-32 scroll-mt-24">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2
+            className="text-4xl md:text-5xl font-heading font-bold text-tech-cyan text-glow text-center mb-12"
+            data-aos="fade-up"
+          >
+            常見問題
+          </h2>
+          <div className="space-y-4">
+            {FAQS.map((faq, index) => (
+              <details
+                key={faq.id}
+                open
+                className="bg-tech-darker border-glow rounded-lg p-6"
+                data-aos="fade-up"
+                data-aos-delay={index * 50}
+              >
+                <summary className="cursor-pointer text-lg font-semibold text-tech-cyan list-outside">
+                  {faq.q}
+                </summary>
+                <p className="mt-4 text-tech-text leading-relaxed">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 分隔線 */}
+      <div className="section-divider" />
+
       {/* 聯絡我們區塊 */}
       <section id="contact" className="py-24 md:py-32 bg-tech-darker">
         <div className="max-w-4xl mx-auto px-6">
@@ -858,10 +848,20 @@ export default function App() {
           <p className="text-tech-cyan font-heading font-bold text-lg mb-2">
             丰科有限公司 Fun Tech CO
           </p>
-          <div className="flex items-center justify-center gap-2 text-tech-text mb-2">
-            <FaMapMarkerAlt className="text-tech-cyan flex-shrink-0" />
-            <span>新北市中和區中原二街28號18樓</span>
-          </div>
+          <address className="not-italic">
+            <div className="flex items-center justify-center gap-2 text-tech-text mb-2">
+              <FaMapMarkerAlt className="text-tech-cyan flex-shrink-0" />
+              <span>{ADDRESS_FULL}</span>
+            </div>
+            <p className="mb-2">
+              <a
+                href={`mailto:${EMAIL}`}
+                className="text-tech-cyan hover:text-tech-purple transition-colors underline"
+              >
+                {EMAIL}
+              </a>
+            </p>
+          </address>
           <p className="text-tech-text/70 text-sm">
             {`© ${COPYRIGHT_YEAR} 丰科有限公司`}
           </p>

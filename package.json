@@ -20,7 +20,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "postbuild": "node scripts/prerender.js",
+    "postbuild": "node scripts/prerender.js && node scripts/check-seo.js",
     "og-image": "node scripts/make-og-image.js",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
