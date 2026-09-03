@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-scroll';
+import AOS from 'aos';
+import { COPYRIGHT_YEAR } from './data/site';
 import {
   FaMobileAlt,
   FaGlobe,
@@ -35,6 +37,18 @@ import vegblogFull2 from './images/projects/vegblog-full-2.webp';
 const PROJECT_COVER_SIZES =
   '(min-width: 1200px) 536px, (min-width: 768px) calc((100vw - 120px) / 2), calc(100vw - 88px)';
 
+const PARTICLE_SEED = 20260903;
+let aosInitialized = false;
+
+function mulberry32(a) {
+  return function next() {
+    let t = (a += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [lightboxProject, setLightboxProject] = useState(null);
@@ -64,15 +78,27 @@ export default function App() {
     lightboxTriggerRef.current = null;
   }, []);
 
-  // 粒子背景生成
-  const particles = Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    style: {
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 6}s`,
-    },
-  }));
+  // 粒子背景生成（固定種子，hydration 前後一致）
+  const particles = useMemo(() => {
+    const rand = mulberry32(PARTICLE_SEED);
+    return Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      style: {
+        left: `${Math.floor(rand() * 100)}%`,
+        top: `${Math.floor(rand() * 100)}%`,
+        animationDelay: `${Math.floor(rand() * 6)}s`,
+      },
+    }));
+  }, []);
+
+  useEffect(() => {
+    if (!aosInitialized) {
+      AOS.init({ duration: 1000, once: true, offset: 100 });
+      aosInitialized = true;
+    } else {
+      AOS.refreshHard();
+    }
+  }, []);
 
   // 專案數據
   const projects = [
@@ -294,9 +320,9 @@ export default function App() {
       {/* 導航欄 */}
       <nav className="fixed top-0 w-full bg-tech-darker/80 backdrop-blur-md shadow-lg z-50 border-b border-tech-cyan/20">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-heading font-bold text-tech-cyan text-glow">
-            丰科有限公司
-          </h1>
+          <a href="#home" className="text-2xl font-heading font-bold text-tech-cyan text-glow">
+            <span>丰科有限公司</span>
+          </a>
           
           {/* 桌面版選單 */}
           <div className="hidden md:flex space-x-8">
@@ -428,7 +454,7 @@ export default function App() {
         {/* 漸層覆蓋 */}
         <div className="gradient-overlay" />
 
-        <div className="text-center max-w-5xl mx-auto px-6 relative z-10" data-aos="fade-up">
+        <div className="text-center max-w-5xl mx-auto px-6 relative z-10">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-tech-cyan text-glow mb-4">
             丰科有限公司
           </h1>
@@ -837,7 +863,7 @@ export default function App() {
             <span>新北市中和區中原二街28號18樓</span>
           </div>
           <p className="text-tech-text/70 text-sm">
-            © {new Date().getFullYear()} 丰科有限公司
+            {`© ${COPYRIGHT_YEAR} 丰科有限公司`}
           </p>
         </div>
       </footer>
