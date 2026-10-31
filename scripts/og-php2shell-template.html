@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Noto+Sans+TC:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+      body {
+        background: #0a0a0f;
+        color: #e4e4e7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .card {
+        width: 1080px;
+        height: 520px;
+        border: 2px solid #00d4ff;
+        box-sizing: border-box;
+        padding: 52px 72px;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(0, 212, 255, 0.08));
+      }
+      .badge {
+        align-self: flex-start;
+        font-family: "Noto Sans TC", sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        color: #0a0a0f;
+        background: #00d4ff;
+        padding: 6px 18px;
+        border-radius: 999px;
+        margin: 0 0 28px;
+      }
+      .name {
+        font-family: Orbitron, sans-serif;
+        font-weight: 700;
+        font-size: 92px;
+        letter-spacing: 0.02em;
+        color: #00d4ff;
+        margin: 0 0 8px;
+        line-height: 1.05;
+      }
+      .title {
+        font-family: "Noto Sans TC", sans-serif;
+        font-weight: 700;
+        font-size: 56px;
+        color: #e4e4e7;
+        margin: 0 0 24px;
+      }
+      .facts {
+        font-family: "Noto Sans TC", sans-serif;
+        font-weight: 700;
+        font-size: 26px;
+        color: rgba(228, 228, 231, 0.8);
+        margin: 0;
+      }
+      .footer {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+      .brand {
+        font-family: "Noto Sans TC", sans-serif;
+        font-weight: 700;
+        font-size: 28px;
+        color: #e4e4e7;
+        margin: 0;
+      }
+      .url {
+        font-family: Orbitron, sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+        color: #00d4ff;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <p class="badge">資安緊急公告</p>
+      <p class="name">PHP2Shell</p>
+      <p class="title">漏洞修復協助</p>
+      <p class="facts">CVE-2026-109618・CVE-2026-109619｜CVSS 9.2｜已遭實際攻擊</p>
+      <div class="footer">
+        <p class="brand">丰科有限公司 Fun Tech CO</p>
+        <p class="url">fun-tech.vip</p>
+      </div>
+    </div>
+  </body>
+</html>

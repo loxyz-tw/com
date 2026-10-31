@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fun-tech.vip/</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-10-31</lastmod>
+  </url>
+  <url>
+    <loc>https://fun-tech.vip/services/php2shell/</loc>
+    <lastmod>2026-10-31</lastmod>
   </url>
 </urlset>

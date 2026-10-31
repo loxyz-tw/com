@@ -7,17 +7,23 @@ import {
   FaGlobe,
   FaCog,
   FaRobot,
+  FaShieldAlt,
   FaEnvelope,
   FaMapMarkerAlt,
   FaExternalLinkAlt,
   FaTimes,
   FaChevronLeft,
   FaChevronRight,
+  FaCopy,
+  FaCheck,
+  FaLine,
 } from 'react-icons/fa';
-import { COPYRIGHT_YEAR, CONTENT_UPDATED_AT, EMAIL, ADDRESS_FULL } from './data/site';
+import { COPYRIGHT_YEAR, CONTENT_UPDATED_AT, EMAIL, LINE_ID, LINE_URL, ADDRESS_FULL } from './data/site';
+import { PHP2SHELL_PATH } from './data/php2shell';
 import { PROJECTS as PROJECT_DATA } from './data/projects';
 import { FAQS } from './data/faqs';
 import StructuredData from './seo/StructuredData';
+import { copyText } from './utils/copyText';
 
 import newstocomicCover640 from './images/projects/newstocomic-cover-640.webp';
 import newstocomicCover1280 from './images/projects/newstocomic-cover-1280.webp';
@@ -96,10 +102,22 @@ export default function App() {
   const lightboxDialogRef = useRef(null);
   const lightboxCloseBtnRef = useRef(null);
   const lightboxScrollRef = useRef(null);
+  const [emailCopied, setEmailCopied] = useState(false);
+  const emailCopiedTimerRef = useRef(null);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  const copyEmail = async () => {
+    const ok = await copyText(EMAIL);
+    if (!ok) return;
+    setEmailCopied(true);
+    window.clearTimeout(emailCopiedTimerRef.current);
+    emailCopiedTimerRef.current = window.setTimeout(() => setEmailCopied(false), 2000);
+  };
+
+  useEffect(() => () => window.clearTimeout(emailCopiedTimerRef.current), []);
 
   const openLightbox = (project, triggerEl) => {
     lightboxTriggerRef.current = triggerEl;
@@ -258,6 +276,23 @@ export default function App() {
       <StructuredData />
       {/* 導航欄 */}
       <nav className="fixed top-0 w-full bg-tech-darker/80 backdrop-blur-md shadow-lg z-50 border-b border-tech-cyan/20">
+        {/* 最新消息橫幅 */}
+        <div className="bg-gradient-to-r from-tech-purple to-tech-cyan/80 text-white">
+          <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-center gap-3 text-sm">
+            <span className="shrink-0 px-2 py-0.5 text-xs font-bold text-tech-dark bg-tech-text rounded">
+              最新消息
+            </span>
+            <p className="truncate">
+              PHP 核心漏洞 PHP2Shell 已遭實際攻擊<span className="hidden sm:inline">，使用 PHP 架設的網站請盡快修補</span>
+            </p>
+            <a
+              href={PHP2SHELL_PATH}
+              className="shrink-0 font-bold underline hover:text-tech-dark cursor-pointer transition-colors"
+            >
+              了解修復服務 →
+            </a>
+          </div>
+        </div>
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <a href="#home" className="text-2xl font-heading font-bold text-tech-cyan text-glow">
             <span>丰科有限公司</span>
@@ -395,7 +430,7 @@ export default function App() {
       </nav>
 
       {/* Hero 區塊 */}
-      <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+      <section id="home" className="min-h-screen flex items-center justify-center pt-28 relative overflow-hidden">
         {/* 粒子背景 */}
         <div className="absolute inset-0 overflow-hidden">
           {particles.map((particle) => (
@@ -513,6 +548,67 @@ export default function App() {
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            {/* 緊急服務卡片：PHP2Shell 漏洞修復（id 放在外層，避免 AOS 位移影響捲動定位） */}
+            <div id="service-php2shell" className="md:col-span-2 scroll-mt-36">
+              <div
+                className="bg-gradient-to-r from-tech-purple/30 to-tech-cyan/20 border-glow rounded-lg p-8 card-expand relative overflow-hidden"
+                data-aos="fade-up"
+                data-aos-delay="0"
+              >
+                <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-6">
+                  <div className="w-16 h-16 shrink-0 bg-tech-purple/30 rounded-full flex items-center justify-center icon-rotate">
+                    <FaShieldAlt className="text-3xl text-tech-cyan" />
+                  </div>
+                  <div className="flex-1">
+                    <span className="inline-block mb-3 px-3 py-1 text-xs font-bold tracking-wider text-tech-dark bg-tech-cyan rounded-full">
+                      緊急資安服務
+                    </span>
+                    <h3 className="text-2xl font-body font-semibold text-tech-cyan mb-4">
+                      協助修復 PHP 漏洞 PHP2Shell
+                    </h3>
+                    <p className="text-tech-text leading-relaxed mb-4">
+                      PHP 核心引擎近期揭露重大漏洞 PHP2Shell（CVE-2026-109618、CVE-2026-109619），攻擊者無需登入即可能在伺服器上執行程式碼，且已出現實際攻擊。WordPress、Drupal、Joomla 等以 PHP 架設的網站都可能受影響，我們協助您盡快檢測與修補。
+                    </p>
+                    <div className="mt-4 pt-4 border-t border-tech-cyan/20 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                      <div className="flex flex-col items-start gap-4">
+                        <p className="text-sm text-tech-text/80">
+                          • 主機 PHP 版本與執行環境曝險檢測<br />
+                          • 升級至修補版本或套用主機商修補，舊版 PHP 規劃遷移<br />
+                          • 輪替可能外洩的金鑰、Token 與 API Key<br />
+                          • 修補後驗證與入侵跡象檢查
+                        </p>
+                        <a
+                          href={PHP2SHELL_PATH}
+                          className="font-bold text-tech-cyan underline hover:text-tech-purple transition-colors"
+                        >
+                          完整說明 →
+                        </a>
+                      </div>
+                      <div className="shrink-0 flex flex-wrap gap-3 self-start md:self-auto">
+                        <Link
+                          to="contact"
+                          smooth={true}
+                          duration={500}
+                          className="px-6 py-3 bg-tech-cyan text-tech-dark font-bold rounded-lg glow-effect hover:bg-tech-purple transition-all duration-300 button-click cursor-pointer"
+                        >
+                          立即聯絡我們
+                        </Link>
+                        <a
+                          href={LINE_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-6 py-3 border-2 border-tech-cyan text-tech-cyan font-bold rounded-lg hover:bg-tech-cyan/10 transition-all duration-300 button-click"
+                        >
+                          <FaLine className="text-xl" aria-hidden="true" />
+                          LINE 聯絡
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* 服務卡片 1 */}
             <div 
               className="bg-tech-darker border-glow rounded-lg p-8 card-expand relative overflow-hidden h-full flex flex-col"
@@ -695,7 +791,7 @@ export default function App() {
               <div
                 key={project.id}
                 id={project.anchor}
-                className="scroll-mt-24 h-full"
+                className="scroll-mt-32 h-full"
               >
                 <div
                   className="project-card bg-tech-darker border-glow rounded-lg overflow-hidden h-full flex flex-col"
@@ -776,7 +872,7 @@ export default function App() {
       <div className="section-divider" />
 
       {/* 常見問題 */}
-      <section id="faq" className="py-24 md:py-32 scroll-mt-24">
+      <section id="faq" className="py-24 md:py-32 scroll-mt-32">
         <div className="max-w-4xl mx-auto px-6">
           <h2
             className="text-4xl md:text-5xl font-heading font-bold text-tech-cyan text-glow text-center mb-12"
@@ -835,14 +931,44 @@ export default function App() {
                   <p className="text-tech-text mb-1">
                     <span className="text-tech-cyan font-semibold">Email:</span>
                   </p>
-                  <a 
-                    href="mailto:app@fun-tech.vip" 
-                    className="text-tech-cyan hover:text-tech-purple transition-colors underline text-lg"
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                  >
-                    app@fun-tech.vip
-                  </a>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <a
+                      href={`mailto:${EMAIL}`}
+                      className="text-tech-cyan hover:text-tech-purple transition-colors underline text-lg"
+                    >
+                      {EMAIL}
+                    </a>
+                    <button
+                      type="button"
+                      onClick={copyEmail}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 text-sm border border-tech-cyan/40 rounded-md text-tech-cyan hover:bg-tech-cyan/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                      aria-label={emailCopied ? '已複製 Email' : '複製 Email'}
+                    >
+                      {emailCopied ? <FaCheck aria-hidden="true" /> : <FaCopy aria-hidden="true" />}
+                      <span>{emailCopied ? '已複製' : '複製'}</span>
+                    </button>
+                    <span className="sr-only" aria-live="polite">{emailCopied ? 'Email 已複製到剪貼簿' : ''}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <FaLine className="text-2xl text-tech-cyan mt-1 flex-shrink-0" />
+                <div>
+                  <p className="text-tech-text mb-1">
+                    <span className="text-tech-cyan font-semibold">LINE:</span>
+                  </p>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-tech-text text-lg">{`ID：${LINE_ID}`}</span>
+                    <a
+                      href={LINE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 text-sm border border-tech-cyan/40 rounded-md text-tech-cyan hover:bg-tech-cyan/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-tech-cyan"
+                    >
+                      加入好友
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

@@ -3,6 +3,8 @@ export const NAME_ZH = '丰科有限公司';
 export const NAME_EN = 'Fun Tech CO';
 export const ALTERNATE_NAME = ['Fun Tech CO'];
 export const EMAIL = 'app@fun-tech.vip';
+export const LINE_ID = 'fun-tech.vip';
+export const LINE_URL = `https://line.me/ti/p/~${LINE_ID}`;
 
 export const ADDRESS = {
   streetAddress: '中原二街28號18樓',
@@ -13,7 +15,7 @@ export const ADDRESS = {
 
 export const ADDRESS_FULL = '新北市中和區中原二街28號18樓';
 
-export const CONTENT_UPDATED_AT = '2026-09-03';
+export const CONTENT_UPDATED_AT = '2026-10-31';
 export const COPYRIGHT_YEAR = 2026;
 
 export const SITE_TITLE = '丰科有限公司 Fun Tech CO｜App、網站與 AI 應用開發';

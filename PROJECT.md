@@ -24,8 +24,8 @@ npm install       # 這台機器上可能還沒裝過
 
 ## 專案
 
-丰科有限公司（Fun Tech CO）形象官網。Create React App + Tailwind，單頁式，正式站 https://fun-tech.vip。
-網站絕大部分內容集中在 `src/App.js`（約 570 行）。
+丰科有限公司（Fun Tech CO）形象官網。Create React App + Tailwind，首頁加上獨立服務頁（目前為 `/services/php2shell/`），正式站 https://fun-tech.vip。
+網站絕大部分內容集中在 `src/App.js`（約 1000 行）。
 
 ## 指令
 
@@ -84,6 +84,7 @@ Chrome 自動化在這裡有三個坑，會讓你以為程式壞了、其實是�
 ## SEO 資產維護
 
 - 改頁面內容、服務、案例或 FAQ 後，同步更新 `src/data/site.js` 的 `CONTENT_UPDATED_AT`（`YYYY-MM-DD`），以及 `public/sitemap.xml` 的 `<lastmod>`，兩者必須相同；並檢查 `public/llms.txt` 是否仍與 `src/data/` 一致。
+- 新增頁面要同時加進 `src/routes.js`、prerender `ROUTES`、sitemap、check-seo。
 - `npm run build` 會跑 `postbuild`：`scripts/prerender.js` 與 `scripts/check-seo.js`。任一失敗即整次 build 失敗，不要略過。
-- 需要重產 Open Graph 圖時執行 `npm run og-image`（輸出 `public/og-image.png`，記得一併提交）。
+- 需要重產 Open Graph 圖時執行 `npm run og-image`（輸出 `public/og-image.png` 與各頁專屬圖如 `public/og-php2shell.png`，記得一併提交）。只重產某一張：`npm run og-image -- php2shell`；名稱與模板對應見 `scripts/make-og-image.js` 的 `TARGETS`。
 - Hydration 規則：首次 render 路徑不得使用 `Date`、`Math.random`、`window`、`document`（`useEffect` 內除外）。文案若混有變數，請用單一 template string，避免被序列化成一個 text node 後 hydration 對不上。

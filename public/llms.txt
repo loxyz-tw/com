@@ -10,6 +10,7 @@
 - 網頁平台設計
 - 資訊系統建置
 - AI 應用與流程自動化
+- 協助修復 PHP 漏洞 PHP2Shell — https://fun-tech.vip/services/php2shell/
 
 ## 案例
 
@@ -21,4 +22,5 @@
 ## 聯絡
 
 Email：app@fun-tech.vip
+LINE：fun-tech.vip（https://line.me/ti/p/~fun-tech.vip）
 地址：新北市中和區中原二街28號18樓
