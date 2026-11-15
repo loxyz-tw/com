@@ -15,12 +15,12 @@ export const ADDRESS = {
 
 export const ADDRESS_FULL = '新北市中和區中原二街28號18樓';
 
-export const CONTENT_UPDATED_AT = '2026-10-31';
+export const CONTENT_UPDATED_AT = '2026-11-15';
 export const COPYRIGHT_YEAR = 2026;
 
 export const SITE_TITLE = '丰科有限公司 Fun Tech CO｜App、網站與 AI 應用開發';
 export const SITE_DESCRIPTION =
-  '丰科有限公司位於新北市中和區，提供 iOS/Android App、網站平台、資訊系統與生成式 AI 流程自動化開發，並協助 Google Play 正式版權限申請。四個已上線案例可直接體驗。';
+  '丰科有限公司位於新北市中和區，提供 iOS/Android App、網站平台、資訊系統與生成式 AI 流程自動化開發，並協助 Google Play 正式版權限申請。五個已上線案例可直接體驗。';
 
 export const SERVICES = [
   {

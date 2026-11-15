@@ -235,8 +235,8 @@ function checkPage(html, page, sitemapEntries) {
     const listItems = (itemList.itemListElement || []).filter(
       (n) => n['@type'] === 'ListItem'
     );
-    if (listItems.length !== 4) {
-      fail(`${page.file} ListItem count must be 4, got ${listItems.length}`);
+    if (listItems.length !== 5) {
+      fail(`${page.file} ListItem count must be 5, got ${listItems.length}`);
     }
     listItems.forEach((item, i) => {
       if (typeof item.position !== 'number') {

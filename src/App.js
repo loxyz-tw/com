@@ -42,6 +42,10 @@ import vegblogCover640 from './images/projects/vegblog-cover-640.webp';
 import vegblogCover1280 from './images/projects/vegblog-cover-1280.webp';
 import vegblogFull1 from './images/projects/vegblog-full-1.webp';
 import vegblogFull2 from './images/projects/vegblog-full-2.webp';
+import nextlifeCover640 from './images/projects/nextlife-cover-640.webp';
+import nextlifeCover1280 from './images/projects/nextlife-cover-1280.webp';
+import nextlifeFull1 from './images/projects/nextlife-full-1.webp';
+import nextlifeFull2 from './images/projects/nextlife-full-2.webp';
 
 const PROJECT_COVER_SIZES =
   '(min-width: 1200px) 536px, (min-width: 768px) calc((100vw - 120px) / 2), calc(100vw - 88px)';
@@ -74,6 +78,13 @@ const PROJECT_IMAGES = {
       srcSet: `${vegblogCover640} 640w, ${vegblogCover1280} 1280w`,
     },
     lightbox: [vegblogFull1, vegblogFull2],
+  },
+  5: {
+    cover: {
+      src: nextlifeCover640,
+      srcSet: `${nextlifeCover640} 640w, ${nextlifeCover1280} 1280w`,
+    },
+    lightbox: [nextlifeFull1, nextlifeFull2],
   },
 };
 
@@ -523,7 +534,8 @@ export default function App() {
               <br className="hidden lg:block" />
               已上線案例包含蔬食綠洲 VegMap（雙平台合計 <span className="whitespace-nowrap">1000+ 下載</span>）、WBC 2026 台灣情報站、
               <br className="hidden lg:block" />
-              <span className="whitespace-nowrap">新聞漫畫 NewsToComic 與蔬食知識庫。</span>
+              <span className="whitespace-nowrap">新聞漫畫 NewsToComic、</span>
+              <span className="whitespace-nowrap">蔬食知識庫與此世他世。</span>
             </p>
             <p className="text-lg md:text-xl text-tech-text leading-relaxed text-pretty">
               我們相信技術應該服務於人。
@@ -776,7 +788,7 @@ export default function App() {
             data-aos-delay="100"
           >
             我們的專案涵蓋 AI 自動化內容生產、雙平台行動應用，以及短交期的內容型網站。
-            以下四個案例都已實際上線，歡迎直接點開來看。
+            以下五個案例都已實際上線，歡迎直接點開來看。
           </p>
           <p
             className="text-center text-tech-text/60 text-sm mb-12"

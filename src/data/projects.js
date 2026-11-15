@@ -75,4 +75,21 @@ export const PROJECTS = [
       '蔬食知識庫最新文章區：六篇文章卡片，副標註明每篇附參考來源與審閱紀錄',
     ],
   },
+  {
+    id: 5,
+    anchor: 'project-nextlife',
+    title: '此世他世',
+    category: 'Web · 互動內容',
+    description:
+      '依佛經記載設計的投生模擬器。使用者回答日常言行與心念的問卷、逐年推進人生事件，最後看到投生去向與對應的經文。判定依據都附上阿含經與尼柯耶的出處；經文沒給數字的地方標明為本站設定，換算方式全部公開。',
+    services: ['網頁平台設計', '資訊系統建置'],
+    technologies: ['Preact', 'TypeScript', 'FastAPI', 'PostgreSQL', 'Cloud Run', 'Cloudflare Pages'],
+    links: [{ label: '查看專案', url: 'https://next-life.app/' }],
+    alt: '此世他世專案合成封面：首頁標題「這一生的選擇，走向哪裡？」與開始按鈕，搭配天、人、畜生、餓鬼、地獄五趣轉盤',
+    lightboxLayout: 'scroll',
+    lightboxAlts: [
+      '此世他世五趣介紹頁：地獄一節的插圖、經文摘述與出處連結',
+      '此世他世換算說明頁：模型與基線的計算方式說明',
+    ],
+  },
 ];
